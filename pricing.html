@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://img.icons8.com/?size=100&id=a4l6bA9mSmBh&format=png&color=40C057" type="image/x-icon">
+    <title>Pricing | Resume/CV Builder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .pricing-section {
+            padding: 60px 0;
+        }
+        .pricing-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .pricing-card:hover {
+            transform: scale(1.05);
+        }
+        .pricing-card .card-body {
+            padding: 30px;
+            text-align: center;
+        }
+        .pricing-card .card-title {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+        }
+        .pricing-card .card-price {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .pricing-card .card-text {
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+        .pricing-card .btn {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .coupon-section {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .coupon-input {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .apply-btn {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .apply-btn:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            background-color: #343a40; /* Match navbar color */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Resume Builder</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><strong>HOME</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="free.html"><strong>FREE</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="coupon-code.html"><strong>PAID</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html"><strong>ABOUT US</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html"><strong>CONTACT US</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing.html"><strong>PRICING</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="terms-and-conditions.html"><strong>TERMS</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="privacy-policy.html"><strong>PRIVACY</strong></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pricing-section">
+        <div class="pricing-header">
+            <h1>Our Pricing Plans</h1>
+            <p>Choose the plan that best suits your resume-building needs. Each plan is designed to offer the best value and quality.</p>
+        </div>
+        <div class="coupon-section">
+            <input type="text" id="couponCode" class="coupon-input" placeholder="Enter Coupon Code">
+            <button id="applyCoupon" class="apply-btn">Apply Coupon</button>
+            <p id="discountMessage"></p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card pricing-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Basic Plan</h5>
+                        <div class="card-price" id="basicPrice">₹ 199</div>
+                        <p class="card-text">Single Resume Download</p>
+                        <ul class="list-unstyled">
+                            <li>ATS Friendly</li>
+                            <li>Single Template</li>
+                            <li>Standard Quality</li>
+                            <li>PDF File Format Only</li>
+                            <li>Basic Formatting</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card pricing-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Pro Plan</h5>
+                        <div class="card-price" id="proPrice">₹ 349</div>
+                        <p class="card-text">Unlimited Access and Support</p>
+                        <ul class="list-unstyled">
+                            <li>ATS Friendly</li>
+                            <li>Multi-Template Access</li>
+                            <li>High Quality Resume</li>
+                            <li>PDF and DOCX Formats</li>
+                            <li>Advanced Formatting</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card pricing-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Premium Plan</h5>
+                        <div class="card-price" id="premiumPrice">₹ 499</div>
+                        <p class="card-text">Customer Service 24x7</p>
+                        <ul class="list-unstyled">
+                            <li>ATS Friendly</li>
+                            <li>Exclusive & Customer Support</li>
+                            <li>Multiple Template Access</li>
+                            <li>PDF, DOCX, and TXT Formats</li>
+                            <li>Custom Formatting Options</li>
+                            <li>One-on-One Consultation</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Developed by VIGNESH G <span id="currentYear"></span>. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('applyCoupon').addEventListener('click', function() {
+            const couponCode = document.getElementById('couponCode').value.trim();
+            const basicPriceElement = document.getElementById('basicPrice');
+            const proPriceElement = document.getElementById('proPrice');
+            const premiumPriceElement = document.getElementById('premiumPrice');
+            const discountMessage = document.getElementById('discountMessage');
+            
+            const validCoupon = 'DKBD0309';
+            const discount = 199; // Discount amount
+    
+            if (couponCode === validCoupon) {
+                basicPriceElement.textContent = '₹ ' + (199 - discount);
+                proPriceElement.textContent = '₹ ' + (349 - discount);
+                premiumPriceElement.textContent = '₹ ' + (499 - discount);
+                discountMessage.textContent = 'Coupon Applied! Prices have been updated.';
+                discountMessage.style.color = 'green';
+            } else {
+                discountMessage.textContent = 'Invalid Coupon Code';
+                discountMessage.style.color = 'red';
+            }
+        });
+    
+        function getPrice(plan) {
+            const basicPrice = 199;
+            const proPrice = 349;
+            const premiumPrice = 499;
+            const discount = 199; // Discount amount
+            
+            switch(plan) {
+                case 'basic':
+                    return document.getElementById('couponCode').value.trim() === 'DKBD0309' ? basicPrice - discount : basicPrice;
+                case 'pro':
+                    return document.getElementById('couponCode').value.trim() === 'DKBD0309' ? proPrice - discount : proPrice;
+                case 'premium':
+                    return document.getElementById('couponCode').value.trim() === 'DKBD0309' ? premiumPrice - discount : premiumPrice;
+                default:
+                    return 0;
+            }
+        }
+    
+        function handleBuyNow(plan) {
+            const price = getPrice(plan);
+            if (price === 0) {
+                window.location.href = 'build1.html'; // Redirect to build1.html if price is zero
+            } else {
+                window.location.href = 'payment.html'; // Redirect to payment.html otherwise
+            }
+        }
+    
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            button.addEventListener('click', function() {
+                const plan = this.parentElement.querySelector('.card-title').textContent.toLowerCase().replace(' plan', '');
+                handleBuyNow(plan);
+            });
+        });
+    </script>
+    
+</body>
+</html>
