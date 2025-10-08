@@ -32,20 +32,13 @@ A fully responsive **Resume Generator Web App** built using **HTML, CSS3, JavaSc
 Resume-Generator/
 │
 ├── index.html
-├── /assets
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
-├── /templates
-│   ├── template1.html
-│   └── template2.html
-│
-├── /backend
-│   ├── server.js
-│   ├── routes/
-│   └── models/
-│
+├── assets
+├── free.html
+├── paid.html
+├── login.html
+├── build11.html
+├── build22.html
+├── pricing.html
 └── README.md
 ```
 
