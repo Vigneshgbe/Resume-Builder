@@ -1,13 +1,14 @@
 /* ============================================
-   Resume Builder — core engine
-   One data model, one localStorage key,
-   three render skins (classic / sidebar / modern)
+   Resume Builder — core engine (v2)
+   TinyMCE-backed rich text on every content
+   field. Data model stores HTML for rich
+   fields, plain strings for single-line fields.
    ============================================ */
 
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'resumeBuilderData_v1';
+  var STORAGE_KEY = 'resumeBuilderData_v2';
 
   var DEFAULT_DATA = {
     template: 'classic',
@@ -17,13 +18,13 @@
     phone: '',
     location: '',
     link: '',
-    summary: '',
-    skills: '',
-    languages: '',
-    achievements: '',
-    interests: '',
-    experience: [],
-    education: []
+    summary: '',        // HTML
+    skills: '',         // HTML
+    languages: '',      // HTML
+    achievements: '',   // HTML
+    interests: '',      // HTML
+    experience: [],      // [{role, company, dates, description(HTML)}]
+    education: []        // [{degree, school, year}]
   };
 
   var data = loadData();
@@ -33,11 +34,38 @@
   function loadData() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return clone(DEFAULT_DATA);
+      if (!raw) return migrateOrDefault();
       var parsed = JSON.parse(raw);
       return Object.assign(clone(DEFAULT_DATA), parsed);
     } catch (e) {
       console.warn('Could not read saved resume, starting fresh.', e);
+      return clone(DEFAULT_DATA);
+    }
+  }
+
+  // If someone has data saved under the old v1 (plain-CSV) key, bring it
+  // forward so upgrading doesn't wipe their draft. CSV values become
+  // simple <p> text; TinyMCE opens them as plain text on first load.
+  function migrateOrDefault() {
+    try {
+      var oldRaw = localStorage.getItem('resumeBuilderData_v1');
+      if (!oldRaw) return clone(DEFAULT_DATA);
+      var old = JSON.parse(oldRaw);
+      var fresh = clone(DEFAULT_DATA);
+      ['template', 'name', 'title', 'email', 'phone', 'location', 'link'].forEach(function (k) {
+        if (old[k]) fresh[k] = old[k];
+      });
+      ['summary', 'skills', 'languages', 'achievements', 'interests'].forEach(function (k) {
+        if (old[k]) fresh[k] = '<p>' + escapeHTML(old[k]) + '</p>';
+      });
+      if (Array.isArray(old.experience)) {
+        fresh.experience = old.experience.map(function (e) {
+          return { role: e.role || '', company: e.company || '', dates: e.dates || '', description: e.description ? '<p>' + escapeHTML(e.description) + '</p>' : '' };
+        });
+      }
+      if (Array.isArray(old.education)) fresh.education = old.education;
+      return fresh;
+    } catch (e) {
       return clone(DEFAULT_DATA);
     }
   }
@@ -72,7 +100,7 @@
     }
   }
 
-  // ---------- form <-> data wiring ----------
+  // ---------- simple single-line fields ----------
 
   var simpleFieldMap = {
     'f-name': 'name',
@@ -80,12 +108,7 @@
     'f-email': 'email',
     'f-phone': 'phone',
     'f-location': 'location',
-    'f-link': 'link',
-    'f-summary': 'summary',
-    'f-skills': 'skills',
-    'f-languages': 'languages',
-    'f-achievements': 'achievements',
-    'f-interests': 'interests'
+    'f-link': 'link'
   };
 
   function populateSimpleFields() {
@@ -109,31 +132,145 @@
     });
   }
 
+  // ---------- TinyMCE rich text fields ----------
+  // Toolbar kept intentionally small: bold, italic, bullet/numbered
+  // lists, and undo/redo. Resumes need emphasis and lists, not fonts,
+  // colors, tables, or images — those actively hurt ATS parsing.
+
+  var RTE_TOOLBAR = 'bold italic | bullist numlist | removeformat | undo redo';
+  var RTE_TOOLBAR_SHORT = 'bold italic | bullist | removeformat';
+
+  function initTinyOn(selectorId, toolbar, onChange) {
+    var el = document.getElementById(selectorId);
+    if (!el) return;
+    tinymce.init({
+      selector: '#' + selectorId,
+      license_key: 'gpl',
+      menubar: false,
+      statusbar: false,
+      toolbar: toolbar,
+      plugins: 'lists',
+      placeholder: el.getAttribute('data-placeholder') || '',
+      branding: false,
+      resize: true,
+      min_height: 110,
+      content_style: 'body { font-family: Inter, sans-serif; font-size: 14px; color: #1B1F23; } ul,ol { padding-left: 20px; margin: 0; }',
+      setup: function (editor) {
+        editor.on('init', function () {
+          editor.setContent(el.getAttribute('data-initial') || '');
+        });
+        editor.on('input change undo redo keyup', function () {
+          onChange(editor.getContent());
+        });
+      }
+    });
+  }
+
+  function initRepeatRowTiny(textarea, onChange) {
+    var id = textarea.id;
+    tinymce.init({
+      selector: '#' + id,
+      license_key: 'gpl',
+      menubar: false,
+      statusbar: false,
+      toolbar: RTE_TOOLBAR_SHORT,
+      plugins: 'lists',
+      placeholder: textarea.getAttribute('data-placeholder') || '',
+      branding: false,
+      resize: true,
+      min_height: 90,
+      content_style: 'body { font-family: Inter, sans-serif; font-size: 14px; color: #1B1F23; } ul,ol { padding-left: 20px; margin: 0; }',
+      setup: function (editor) {
+        editor.on('init', function () {
+          editor.setContent(textarea.getAttribute('data-initial') || '');
+        });
+        editor.on('input change undo redo keyup', function () {
+          onChange(editor.getContent());
+        });
+      }
+    });
+  }
+
+  function initAllTiny() {
+    var fields = [
+      { id: 'f-summary', key: 'summary', toolbar: RTE_TOOLBAR },
+      { id: 'f-skills', key: 'skills', toolbar: RTE_TOOLBAR_SHORT },
+      { id: 'f-languages', key: 'languages', toolbar: RTE_TOOLBAR_SHORT },
+      { id: 'f-achievements', key: 'achievements', toolbar: RTE_TOOLBAR_SHORT },
+      { id: 'f-interests', key: 'interests', toolbar: RTE_TOOLBAR_SHORT }
+    ];
+    fields.forEach(function (f) {
+      var el = document.getElementById(f.id);
+      if (!el) return;
+      el.setAttribute('data-initial', data[f.key] || '');
+      initTinyOn(f.id, f.toolbar, function (html) {
+        data[f.key] = html;
+        render();
+        saveData();
+      });
+    });
+  }
+
   // ---------- repeatable rows: experience & education ----------
+
+  var rteRowCounter = 0;
 
   function renderRepeatSection(kind, containerId, templateId, fields) {
     var container = document.getElementById(containerId);
     var tpl = document.getElementById(templateId);
+
+    // Remove any TinyMCE instances currently bound inside this container
+    // before wiping the DOM, so we don't leak editor instances.
+    container.querySelectorAll('textarea.rte').forEach(function (ta) {
+      if (window.tinymce && tinymce.get(ta.id)) tinymce.get(ta.id).remove();
+    });
+
     container.innerHTML = '';
     data[kind].forEach(function (item, index) {
       var node = tpl.content.cloneNode(true);
       var row = node.querySelector('[data-row]');
+      var pendingRte = [];
+
       fields.forEach(function (field) {
         var input = row.querySelector('[data-field="' + field + '"]');
-        input.value = item[field] || '';
-        input.addEventListener('input', function () {
-          data[kind][index][field] = input.value;
-          render();
-          saveData();
-        });
+        if (!input) return;
+        if (input.tagName === 'TEXTAREA' && input.classList.contains('rte')) {
+          rteRowCounter += 1;
+          var uid = 'rte-row-' + kind + '-' + index + '-' + rteRowCounter;
+          input.id = uid;
+          input.setAttribute('data-initial', item[field] || '');
+          pendingRte.push({ input: input, field: field });
+        } else {
+          input.value = item[field] || '';
+          input.addEventListener('input', function () {
+            data[kind][index][field] = input.value;
+            render();
+            saveData();
+          });
+        }
       });
+
       row.querySelector('[data-remove]').addEventListener('click', function () {
         data[kind].splice(index, 1);
         renderRepeatSection(kind, containerId, templateId, fields);
         render();
         saveData();
       });
+
       container.appendChild(row);
+
+      // Only initialize TinyMCE after the row is attached to the live
+      // document — TinyMCE queries the DOM by selector at init time and
+      // will not find (or will misbehave on) a detached node.
+      pendingRte.forEach(function (p) {
+        (function (kindClosure, indexClosure, fieldClosure, inputEl) {
+          initRepeatRowTiny(inputEl, function (html) {
+            data[kindClosure][indexClosure][fieldClosure] = html;
+            render();
+            saveData();
+          });
+        })(kind, index, p.field, p.input);
+      });
     });
   }
 
@@ -155,6 +292,12 @@
   }
 
   // ---------- resume live preview ----------
+  // All templates share one DOM order: Name/Title -> Contact ->
+  // Summary -> Skills -> Experience -> Education -> Languages ->
+  // Achievements -> Interests. Single column throughout — no grid or
+  // flex splitting of content into side-by-side blocks. Rich-text
+  // fields are inserted as sanitized HTML (TinyMCE output only ever
+  // contains the plugins we enabled: bold, italic, lists).
 
   function escapeHTML(str) {
     var div = document.createElement('div');
@@ -162,12 +305,14 @@
     return div.innerHTML;
   }
 
-  function tagList(csv, className) {
-    var items = (csv || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
-    if (!items.length) return '<span class="r-empty">Not added yet</span>';
-    return items.map(function (item) {
-      return '<span class="' + className + '">' + escapeHTML(item) + '</span>';
-    }).join('');
+  function isEmptyRich(html) {
+    if (!html) return true;
+    var stripped = html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, '').trim();
+    return stripped.length === 0;
+  }
+
+  function richBlock(html) {
+    return isEmptyRich(html) ? '' : html;
   }
 
   function contactPieces() {
@@ -175,34 +320,27 @@
   }
 
   function experienceHTML() {
-    if (!data.experience.length) return '<p class="r-empty">No experience added yet</p>';
-    return data.experience.map(function (e) {
+    var withContent = data.experience.filter(function (e) { return e.role || e.company || e.dates || !isEmptyRich(e.description); });
+    if (!withContent.length) return '<p class="r-empty">No experience added yet</p>';
+    return withContent.map(function (e) {
       return '<div class="r-entry">' +
         '<div class="r-entry-head"><span>' + escapeHTML(e.role || 'Role') + (e.company ? ', ' + escapeHTML(e.company) : '') + '</span>' +
         '<span>' + escapeHTML(e.dates) + '</span></div>' +
-        (e.description ? '<div class="r-entry-body">' + escapeHTML(e.description) + '</div>' : '') +
+        (isEmptyRich(e.description) ? '' : '<div class="r-entry-body r-rich">' + richBlock(e.description) + '</div>') +
         '</div>';
     }).join('');
   }
 
   function educationHTML() {
-    if (!data.education.length) return '<p class="r-empty">No education added yet</p>';
-    return data.education.map(function (ed) {
+    var withContent = data.education.filter(function (ed) { return ed.degree || ed.school || ed.year; });
+    if (!withContent.length) return '<p class="r-empty">No education added yet</p>';
+    return withContent.map(function (ed) {
       return '<div class="r-entry">' +
         '<div class="r-entry-head"><span>' + escapeHTML(ed.degree || 'Degree') + '</span><span>' + escapeHTML(ed.year) + '</span></div>' +
         (ed.school ? '<div class="r-entry-sub">' + escapeHTML(ed.school) + '</div>' : '') +
         '</div>';
     }).join('');
   }
-
-  // All templates share the exact same DOM order — single column,
-  // top to bottom — because that is the only layout every major ATS
-  // parses reliably. Visual identity comes from typography, color,
-  // and spacing only, never from splitting content into columns.
-  //
-  // Section order (matches what ATS parsers expect):
-  // Name/Title -> Contact -> Summary -> Skills -> Experience ->
-  // Education -> Languages -> Achievements -> Interests
 
   function sectionBlock(title, innerHTML, skip) {
     if (skip) return '';
@@ -218,20 +356,14 @@
         '<div class="r-contact">' + (contact || '<span class="r-empty">Add your contact details</span>') + '</div>' +
       '</div>' +
       '<hr class="r-divider">' +
-      sectionBlock('Summary', '<p>' + escapeHTML(data.summary) + '</p>', !data.summary) +
-      sectionBlock('Skills', tagList(data.skills, 'r-skill-tag')) +
+      sectionBlock('Summary', '<div class="r-rich">' + richBlock(data.summary) + '</div>', isEmptyRich(data.summary)) +
+      sectionBlock('Skills', isEmptyRich(data.skills) ? '<p class="r-empty">Not added yet</p>' : '<div class="r-rich r-skills-rich">' + data.skills + '</div>') +
       sectionBlock('Experience', experienceHTML()) +
       sectionBlock('Education', educationHTML()) +
-      sectionBlock('Languages', tagList(data.languages, 'r-skill-tag'), !data.languages) +
-      sectionBlock('Achievements', lineList(data.achievements), !data.achievements) +
-      sectionBlock('Interests', tagList(data.interests, 'r-skill-tag'), !data.interests)
+      sectionBlock('Languages', '<div class="r-rich r-skills-rich">' + richBlock(data.languages) + '</div>', isEmptyRich(data.languages)) +
+      sectionBlock('Achievements', '<div class="r-rich">' + richBlock(data.achievements) + '</div>', isEmptyRich(data.achievements)) +
+      sectionBlock('Interests', '<div class="r-rich r-skills-rich">' + richBlock(data.interests) + '</div>', isEmptyRich(data.interests))
     );
-  }
-
-  function lineList(csv) {
-    var items = (csv || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
-    if (!items.length) return '<p class="r-empty">Not added yet</p>';
-    return '<ul class="r-line-list">' + items.map(function (i) { return '<li>' + escapeHTML(i) + '</li>'; }).join('') + '</ul>';
   }
 
   function render() {
@@ -254,7 +386,7 @@
     };
     var btn = document.getElementById('downloadBtn');
     var originalLabel = btn.textContent;
-    btn.textContent = 'Preparing PDF…';
+    btn.textContent = 'Preparing…';
     btn.disabled = true;
     html2pdf().set(opt).from(paper).save().then(function () {
       btn.textContent = originalLabel;
@@ -277,6 +409,20 @@
     toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2600);
   }
 
+  // ---------- mobile form/preview toggle ----------
+
+  function initMobileToggle() {
+    var toggle = document.getElementById('previewToggle');
+    var body = document.body;
+    if (!toggle) return;
+    toggle.addEventListener('click', function () {
+      var showingPreview = body.classList.toggle('show-preview');
+      toggle.textContent = showingPreview ? 'Edit' : 'Preview';
+      toggle.setAttribute('aria-pressed', showingPreview ? 'true' : 'false');
+      if (showingPreview) window.scrollTo(0, 0);
+    });
+  }
+
   // ---------- wire up ----------
 
   function init() {
@@ -286,6 +432,7 @@
     renderAllRepeatSections();
     render();
     saveData();
+    initMobileToggle();
 
     document.querySelectorAll('[data-add]').forEach(function (btn) {
       btn.addEventListener('click', function () { addRow(btn.getAttribute('data-add')); });
@@ -306,10 +453,27 @@
       data.template = keepTemplate;
       populateSimpleFields();
       renderAllRepeatSections();
+      ['f-summary', 'f-skills', 'f-languages', 'f-achievements', 'f-interests'].forEach(function (id) {
+        if (window.tinymce && tinymce.get(id)) tinymce.get(id).setContent('');
+      });
       render();
       saveData();
       showToast('All fields cleared');
     });
+
+    // TinyMCE loads from CDN asynchronously; poll briefly until the
+    // global is available, then initialize every rich text field.
+    var tries = 0;
+    var waitForTiny = setInterval(function () {
+      tries += 1;
+      if (window.tinymce) {
+        clearInterval(waitForTiny);
+        initAllTiny();
+      } else if (tries > 100) {
+        clearInterval(waitForTiny);
+        console.warn('TinyMCE failed to load from CDN; rich text editing unavailable this session.');
+      }
+    }, 50);
   }
 
   document.addEventListener('DOMContentLoaded', init);

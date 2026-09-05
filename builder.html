@@ -10,18 +10,18 @@
 </head>
 <body class="builder-body">
 
-<header class="site-header">
+<header class="site-header builder-header">
   <div class="container">
     <a href="index.html" class="brand">Resume<span>Builder</span></a>
     <div class="builder-header-actions">
-      <label class="template-switch-label" for="templateSwitch">Template</label>
       <select id="templateSwitch" aria-label="Switch template">
         <option value="classic">Classic</option>
         <option value="modern">Modern</option>
         <option value="compact">Compact</option>
         <option value="executive">Executive</option>
       </select>
-      <button id="downloadBtn" class="btn btn-primary btn-sm">Download PDF</button>
+      <button id="previewToggle" class="btn btn-outline btn-sm mobile-only-flex" type="button" aria-pressed="false">Preview</button>
+      <button id="downloadBtn" class="btn btn-primary btn-sm">Download</button>
     </div>
   </div>
 </header>
@@ -30,7 +30,7 @@
   <div class="builder-grid">
 
     <!-- ===== FORM PANEL ===== -->
-    <section class="form-panel" aria-label="Resume details form">
+    <section class="form-panel" aria-label="Resume details form" id="formPanel">
       <div class="form-panel-inner">
 
         <div class="save-status" id="saveStatus">Saved to this browser</div>
@@ -70,7 +70,7 @@
           <div class="form-section-body">
             <div class="form-group">
               <label for="f-summary">A few sentences about you</label>
-              <textarea id="f-summary" rows="4" placeholder="Brief, specific summary of your experience and what you're looking for next."></textarea>
+              <textarea id="f-summary" class="rte" data-placeholder="Brief, specific summary of your experience and what you're looking for next."></textarea>
             </div>
           </div>
         </details>
@@ -91,8 +91,9 @@
           <summary>Skills</summary>
           <div class="form-section-body">
             <div class="form-group">
-              <label for="f-skills">Skills, separated by commas</label>
-              <input type="text" id="f-skills" placeholder="Figma, User research, Prototyping, SQL">
+              <label for="f-skills">List your skills</label>
+              <textarea id="f-skills" class="rte rte-short" data-placeholder="Figma, User research, Prototyping, SQL"></textarea>
+              <p class="hint">Use the bullet-list button, or separate with commas.</p>
             </div>
           </div>
         </details>
@@ -101,8 +102,8 @@
           <summary>Languages <span class="optional-tag">optional</span></summary>
           <div class="form-section-body">
             <div class="form-group">
-              <label for="f-languages">Languages, separated by commas</label>
-              <input type="text" id="f-languages" placeholder="English (fluent), Spanish (conversational)">
+              <label for="f-languages">Languages you speak</label>
+              <textarea id="f-languages" class="rte rte-short" data-placeholder="English (fluent), Spanish (conversational)"></textarea>
             </div>
           </div>
         </details>
@@ -111,8 +112,8 @@
           <summary>Achievements <span class="optional-tag">optional</span></summary>
           <div class="form-section-body">
             <div class="form-group">
-              <label for="f-achievements">Achievements, separated by commas</label>
-              <input type="text" id="f-achievements" placeholder="Dean's list 2023, Hackathon winner">
+              <label for="f-achievements">Notable achievements</label>
+              <textarea id="f-achievements" class="rte rte-short" data-placeholder="Dean's list 2023, Hackathon winner"></textarea>
             </div>
           </div>
         </details>
@@ -121,8 +122,8 @@
           <summary>Interests <span class="optional-tag">optional</span></summary>
           <div class="form-section-body">
             <div class="form-group">
-              <label for="f-interests">Interests, separated by commas</label>
-              <input type="text" id="f-interests" placeholder="Photography, Chess, Volunteering">
+              <label for="f-interests">Interests</label>
+              <textarea id="f-interests" class="rte rte-short" data-placeholder="Photography, Chess, Volunteering"></textarea>
             </div>
           </div>
         </details>
@@ -135,7 +136,7 @@
     </section>
 
     <!-- ===== PREVIEW PANEL ===== -->
-    <section class="preview-panel" aria-label="Resume preview">
+    <section class="preview-panel" aria-label="Resume preview" id="previewPanel">
       <div class="preview-scroll">
         <div id="resumePaper" class="resume-paper template-classic">
           <!-- rendered by builder.js -->
@@ -160,14 +161,14 @@
         <label>Company</label>
         <input type="text" data-field="company" placeholder="Acme Co.">
       </div>
-      <div class="form-group">
+      <div class="form-group repeat-row-grid-full">
         <label>Dates</label>
         <input type="text" data-field="dates" placeholder="2022 — Present">
       </div>
     </div>
     <div class="form-group">
       <label>What you did</label>
-      <textarea data-field="description" rows="3" placeholder="One or two lines on your impact in this role."></textarea>
+      <textarea class="rte rte-row" data-field="description" data-placeholder="Use bullet points for 2-4 concrete outcomes in this role."></textarea>
     </div>
     <button type="button" class="btn-remove-row" data-remove aria-label="Remove this entry">Remove</button>
   </div>
@@ -194,7 +195,8 @@
   </div>
 </template>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="assets/builder.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+<script src="assets/builder.js" defer></script>
 </body>
 </html>

@@ -1,55 +1,52 @@
 /* ============================================
-   Builder layout + resume template skins
+   Builder layout + resume template skins (v2)
+   Mobile-first: base styles are the phone
+   layout, desktop grid is added at min-width.
    ============================================ */
 
 .builder-body { background: var(--paper-dim); }
 
+.builder-header .container { flex-wrap: wrap; row-gap: 8px; height: auto; padding-top: 10px; padding-bottom: 10px; }
+
 .builder-header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-.template-switch-label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--grey);
+  gap: 10px;
+  flex-wrap: wrap;
 }
 #templateSwitch {
-  padding: 8px 10px;
-  font-size: 0.88rem;
+  padding: 9px 10px;
+  font-size: 0.85rem;
   width: auto;
+  max-width: 130px;
 }
+.mobile-only-flex { display: inline-flex; }
 
 .builder-main { padding: 0; }
 
+/* ---------- Mobile-first grid: stacked, toggle-controlled ---------- */
+
 .builder-grid {
-  display: grid;
-  grid-template-columns: 420px 1fr;
-  min-height: calc(100vh - 68px);
+  display: block;
 }
-
-@media (max-width: 980px) {
-  .builder-grid { grid-template-columns: 1fr; }
-}
-
-/* ---------- Form panel ---------- */
 
 .form-panel {
   background: var(--paper);
-  border-right: 1px solid var(--line);
-  overflow-y: auto;
-  max-height: calc(100vh - 68px);
+  display: block;
 }
-@media (max-width: 980px) {
-  .form-panel { max-height: none; border-right: none; border-bottom: 1px solid var(--line); order: 2; }
+.preview-panel {
+  background: var(--paper-dim);
+  display: none;
 }
+body.show-preview .form-panel { display: none; }
+body.show-preview .preview-panel { display: block; }
 
-.form-panel-inner { padding: 24px; }
+.form-panel-inner { padding: 18px 16px 90px; }
 
 .save-status {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--green);
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -59,16 +56,17 @@
   width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--green);
+  flex-shrink: 0;
 }
 
 .form-section {
   border-bottom: 1px solid var(--line);
-  padding: 4px 0 18px;
-  margin-bottom: 14px;
+  padding: 4px 0 16px;
+  margin-bottom: 12px;
 }
 .form-section summary {
   font-family: var(--serif);
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 600;
   cursor: pointer;
   padding: 10px 0;
@@ -76,6 +74,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  -webkit-tap-highlight-color: transparent;
 }
 .form-section summary::-webkit-details-marker { display: none; }
 .form-section summary::after {
@@ -88,7 +87,7 @@
 .form-section[open] summary::after { content: "\2212"; }
 .optional-tag {
   font-family: var(--sans);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 500;
   color: var(--grey);
   text-transform: lowercase;
@@ -96,22 +95,21 @@
 }
 .form-section-body { padding-top: 8px; }
 
-.add-btn { margin-top: 4px; }
+.add-btn { margin-top: 4px; width: 100%; }
 
 .repeat-row {
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 14px;
   margin-bottom: 14px;
   position: relative;
   background: var(--white);
 }
 .repeat-row-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 14px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
-.repeat-row-grid .form-group:last-child { grid-column: 1 / -1; }
 .btn-remove-row {
   background: none;
   border: none;
@@ -119,51 +117,115 @@
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 4px 0;
+  padding: 6px 0;
   margin-top: 4px;
 }
 .btn-remove-row:hover { text-decoration: underline; }
 
 .danger-zone { padding-top: 8px; }
 
+@media (min-width: 640px) {
+  .repeat-row-grid { grid-template-columns: 1fr 1fr; }
+  .repeat-row-grid-full { grid-column: 1 / -1; }
+}
+
+/* ---------- TinyMCE container ---------- */
+
+.rte { display: block; width: 100%; }
+.tox-tinymce {
+  border-radius: var(--radius) !important;
+  border-color: #D6D0C4 !important;
+}
+.tox:not(.tox-tinymce-inline) .tox-editor-header {
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+.tox .tox-toolbar,
+.tox .tox-toolbar__primary { background: var(--paper) !important; }
+
+/* ---------- Desktop layout (side by side, no toggle needed) ---------- */
+
+@media (min-width: 980px) {
+  .mobile-only-flex { display: none; }
+
+  .builder-grid {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    min-height: calc(100vh - 60px);
+  }
+
+  .form-panel {
+    display: block !important;
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+  }
+  .preview-panel {
+    display: flex !important;
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+    justify-content: center;
+  }
+  body.show-preview .form-panel,
+  body.show-preview .preview-panel { display: block !important; }
+  .preview-panel { display: flex !important; }
+
+  .form-panel-inner { padding: 24px; }
+}
+
 /* ---------- Preview panel ---------- */
 
-.preview-panel {
-  background: var(--paper-dim);
-  overflow-y: auto;
-  max-height: calc(100vh - 68px);
-  display: flex;
-  justify-content: center;
-}
-@media (max-width: 980px) {
-  .preview-panel { max-height: none; order: 1; padding-top: 24px; }
-}
-
 .preview-scroll {
-  padding: 36px 24px 60px;
+  padding: 20px 14px 50px;
   width: 100%;
   display: flex;
   justify-content: center;
+}
+@media (min-width: 640px) {
+  .preview-scroll { padding: 36px 24px 60px; }
 }
 
 .resume-paper {
   width: 100%;
   max-width: 700px;
-  min-height: 900px;
+  min-height: 600px;
   background: var(--white);
   box-shadow: var(--shadow-paper);
   font-family: var(--sans);
   color: #222;
 }
 
+/* ---------- Toast ---------- */
+.builder-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 200;
+  max-width: calc(100vw - 40px);
+  text-align: center;
+}
+.builder-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* ============================================
    Template skins — ALL single-column, top to
    bottom, in DOM order. No grid/flex splitting
-   of resume content into side-by-side blocks —
-   ATS parsers read left-to-right, top-to-bottom,
-   and multi-column layouts scramble that order.
-   Visual identity comes only from type, color,
-   rules, and spacing.
+   of resume content into side-by-side blocks.
+   Type scale follows current resume-formatting
+   guidance: name ~18-20pt equivalent, section
+   headers 14-16pt, body 10-12pt, restrained
+   single accent color, generous white space.
    ============================================ */
 
 .resume-paper .r-name { font-weight: 600; }
@@ -177,104 +239,108 @@
 .resume-paper .r-empty { color: #B5AFA3; font-style: italic; }
 .resume-paper .r-entry { margin-bottom: 14px; }
 .resume-paper .r-entry:last-child { margin-bottom: 0; }
-.resume-paper .r-entry-head { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; }
+.resume-paper .r-entry-head { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; flex-wrap: wrap; }
 .resume-paper .r-entry-sub { color: var(--grey); font-size: 0.88rem; margin-bottom: 4px; }
-.resume-paper .r-entry-body { font-size: 0.92rem; margin-top: 2px; }
-.resume-paper .r-line-list { margin: 0; padding-left: 18px; }
-.resume-paper .r-line-list li { margin-bottom: 4px; font-size: 0.92rem; }
-.resume-paper .r-skill-tag {
-  display: inline-block;
-  font-size: 0.85rem;
-  margin: 0 18px 4px 0;
-}
+.resume-paper .r-entry-body { font-size: 0.92rem; margin-top: 4px; }
 .resume-paper .r-section { margin-bottom: 20px; }
 .resume-paper .r-section:last-child { margin-bottom: 0; }
 
-/* ---------- Classic ----------
-   Plain, dependable, the format recruiters and
-   every ATS platform parse without any friction.
-   Times-like serif body, thin rules, no color
-   beyond ink and a single accent line. */
-.template-classic { padding: 50px 56px; font-family: 'Georgia', 'Times New Roman', serif; }
-.template-classic .r-name { font-family: 'Georgia', serif; font-size: 2rem; letter-spacing: 0.01em; margin-bottom: 2px; }
-.template-classic .r-title { font-size: 1.05rem; margin-bottom: 10px; }
-.template-classic .r-contact { font-size: 0.85rem; color: var(--grey); margin-bottom: 18px; font-family: var(--sans); }
-.template-classic .r-contact span:not(:last-child)::after { content: "  \2022  "; }
-.template-classic .r-divider { border: none; border-top: 2px solid var(--ink); margin: 0 0 20px; }
-.template-classic .r-section-title { font-family: var(--sans); color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 4px; margin-bottom: 10px; }
-.template-classic .r-skill-tag { color: var(--ink); }
-.template-classic .r-skill-tag::before { content: "\2022"; margin-right: 6px; color: var(--grey); }
-.template-classic .r-skill-tag:first-child::before { content: none; }
+/* Rich text output styling — TinyMCE only ever emits p/strong/em/ul/ol/li
+   given our restricted toolbar, so these are the only tags to style. */
+.resume-paper .r-rich p { margin: 0 0 8px; }
+.resume-paper .r-rich p:last-child { margin-bottom: 0; }
+.resume-paper .r-rich ul, .resume-paper .r-rich ol { margin: 0 0 8px; padding-left: 18px; }
+.resume-paper .r-rich ul:last-child, .resume-paper .r-rich ol:last-child { margin-bottom: 0; }
+.resume-paper .r-rich li { margin-bottom: 3px; }
+.resume-paper .r-rich strong { font-weight: 700; }
 
-/* ---------- Modern ----------
-   Confident sans-serif, a single accent color
-   used sparingly on section labels and a rule
-   under the name. Still one plain column. */
-.template-modern { padding: 52px 56px; }
-.template-modern .r-name { font-size: 2.1rem; margin-bottom: 2px; }
-.template-modern .r-title { font-size: 1.05rem; color: var(--green); font-weight: 600; margin-bottom: 10px; }
-.template-modern .r-contact { font-size: 0.85rem; color: var(--grey); margin-bottom: 18px; }
+/* Skills/Languages/Interests: render inline & tag-like even if the user
+   typed a bullet list, so short comma/line items read as a compact row. */
+.resume-paper .r-skills-rich ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0; }
+.resume-paper .r-skills-rich ul li { margin: 0; }
+.resume-paper .r-skills-rich p { margin: 0; }
+
+/* --- Classic ---
+   Georgia serif body, thin black rules, ink-only.
+   The safest possible format for any ATS, old or new. */
+.template-classic { padding: 34px 22px; font-family: 'Georgia', 'Times New Roman', serif; }
+.template-classic .r-name { font-family: 'Georgia', serif; font-size: 1.5rem; letter-spacing: 0.01em; margin-bottom: 2px; }
+.template-classic .r-title { font-size: 0.95rem; margin-bottom: 10px; }
+.template-classic .r-contact { font-size: 0.8rem; color: var(--grey); margin-bottom: 16px; font-family: var(--sans); }
+.template-classic .r-contact span:not(:last-child)::after { content: "  \2022  "; }
+.template-classic .r-divider { border: none; border-top: 2px solid var(--ink); margin: 0 0 18px; }
+.template-classic .r-section-title { font-family: var(--sans); color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 4px; margin-bottom: 10px; }
+.template-classic .r-skills-rich ul { gap: 4px 0; }
+.template-classic .r-skills-rich ul li::before { content: "\2022"; margin-right: 6px; color: var(--grey); }
+.template-classic .r-skills-rich ul li { margin-right: 14px; display: inline-flex; align-items: baseline; }
+@media (min-width: 640px) {
+  .template-classic { padding: 50px 56px; }
+  .template-classic .r-name { font-size: 2rem; }
+  .template-classic .r-title { font-size: 1.05rem; }
+}
+
+/* --- Modern ---
+   Sans-serif, single green accent, icon-style contact
+   row, skills placed prominently near the top with a
+   restrained tag treatment. */
+.template-modern { padding: 30px 22px; }
+.template-modern .r-name { font-size: 1.55rem; margin-bottom: 2px; }
+.template-modern .r-title { font-size: 0.95rem; color: var(--green); font-weight: 600; margin-bottom: 10px; }
+.template-modern .r-contact { font-size: 0.8rem; color: var(--grey); margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 4px 0; }
 .template-modern .r-contact span:not(:last-child)::after { content: "  \2022  "; }
-.template-modern .r-divider { border: none; border-top: 3px solid var(--green); margin: 0 0 22px; }
+.template-modern .r-divider { border: none; border-top: 3px solid var(--green); margin: 0 0 18px; }
 .template-modern .r-section-title { color: var(--green); margin-bottom: 10px; }
-.template-modern .r-skill-tag {
+.template-modern .r-skills-rich ul { gap: 6px; }
+.template-modern .r-skills-rich ul li {
   background: var(--paper-dim);
   padding: 4px 12px;
   border-radius: 3px;
-  margin: 0 8px 8px 0;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
+}
+@media (min-width: 640px) {
+  .template-modern { padding: 52px 56px; }
+  .template-modern .r-name { font-size: 2.1rem; }
+  .template-modern .r-title { font-size: 1.05rem; }
 }
 
-/* ---------- Compact ----------
-   Tighter line-height and smaller type for
-   people with a lot to say who need to hold
-   to one page. Still single column. */
-.template-compact { padding: 40px 48px; font-size: 0.92rem; line-height: 1.4; }
-.template-compact .r-name { font-size: 1.7rem; margin-bottom: 1px; }
-.template-compact .r-title { font-size: 0.95rem; margin-bottom: 8px; }
-.template-compact .r-contact { font-size: 0.8rem; color: var(--grey); margin-bottom: 14px; }
+/* --- Compact ---
+   Tighter line-height, smaller type, rust accent.
+   For longer histories that must hold to one page. */
+.template-compact { padding: 26px 20px; font-size: 0.88rem; line-height: 1.4; }
+.template-compact .r-name { font-size: 1.35rem; margin-bottom: 1px; }
+.template-compact .r-title { font-size: 0.88rem; margin-bottom: 8px; }
+.template-compact .r-contact { font-size: 0.76rem; color: var(--grey); margin-bottom: 12px; display: flex; flex-wrap: wrap; }
 .template-compact .r-contact span:not(:last-child)::after { content: "   |   "; color: var(--line); }
-.template-compact .r-divider { border: none; border-top: 1px solid var(--line); margin: 0 0 16px; }
-.template-compact .r-section { margin-bottom: 14px; }
-.template-compact .r-section-title { font-size: 0.72rem; color: var(--rust); margin-bottom: 6px; }
-.template-compact .r-entry { margin-bottom: 10px; }
-.template-compact .r-skill-tag { font-size: 0.8rem; margin: 0 14px 3px 0; }
-.template-compact .r-skill-tag::before { content: "\2022"; margin-right: 5px; color: var(--grey); }
-.template-compact .r-skill-tag:first-child::before { content: none; }
-
-/* ---------- Executive ----------
-   Adapted from the old build2 visual language:
-   large display name, wide letterspacing, a
-   heavier accent rule. Single column throughout. */
-.template-executive { padding: 54px 58px; }
-.template-executive .r-head { text-align: center; margin-bottom: 4px; }
-.template-executive .r-name { font-size: 2.4rem; letter-spacing: 0.02em; }
-.template-executive .r-title { font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.82rem; color: var(--grey); margin-bottom: 12px; }
-.template-executive .r-contact { font-size: 0.85rem; color: var(--grey); margin-bottom: 20px; }
-.template-executive .r-contact span:not(:last-child)::after { content: "  \2022  "; }
-.template-executive .r-divider { border: none; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); height: 3px; margin: 0 0 24px; }
-.template-executive .r-section-title { text-align: left; letter-spacing: 0.1em; color: var(--ink); margin-bottom: 10px; }
-.template-executive .r-skill-tag { border: 1px solid var(--line); padding: 3px 10px; border-radius: 2px; margin: 0 8px 8px 0; font-size: 0.8rem; }
-
-/* ---------- Toast ---------- */
-.builder-toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--ink);
-  color: #fff;
-  padding: 12px 22px;
-  border-radius: var(--radius);
-  font-size: 0.9rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 200;
+.template-compact .r-divider { border: none; border-top: 1px solid var(--line); margin: 0 0 14px; }
+.template-compact .r-section { margin-bottom: 12px; }
+.template-compact .r-section-title { font-size: 0.7rem; color: var(--rust); margin-bottom: 6px; }
+.template-compact .r-entry { margin-bottom: 8px; }
+.template-compact .r-skills-rich ul { gap: 3px 0; }
+.template-compact .r-skills-rich ul li::before { content: "\2022"; margin-right: 5px; color: var(--grey); }
+.template-compact .r-skills-rich ul li { margin-right: 12px; display: inline-flex; font-size: 0.78rem; }
+@media (min-width: 640px) {
+  .template-compact { padding: 40px 48px; font-size: 0.92rem; }
+  .template-compact .r-name { font-size: 1.7rem; }
+  .template-compact .r-title { font-size: 0.95rem; }
 }
-.builder-toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+
+/* --- Executive ---
+   Centered header, wide letter-spacing, heavier double
+   rule. Adapted from the old build2 visual language. */
+.template-executive { padding: 32px 22px; }
+.template-executive .r-head { text-align: center; margin-bottom: 4px; }
+.template-executive .r-name { font-size: 1.7rem; letter-spacing: 0.02em; }
+.template-executive .r-title { font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.76rem; color: var(--grey); margin-bottom: 12px; }
+.template-executive .r-contact { font-size: 0.8rem; color: var(--grey); margin-bottom: 18px; display: flex; flex-wrap: wrap; justify-content: center; }
+.template-executive .r-contact span:not(:last-child)::after { content: "  \2022  "; }
+.template-executive .r-divider { border: none; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); height: 3px; margin: 0 0 20px; }
+.template-executive .r-section-title { text-align: left; letter-spacing: 0.1em; color: var(--ink); margin-bottom: 10px; }
+.template-executive .r-skills-rich ul { gap: 6px; }
+.template-executive .r-skills-rich ul li { border: 1px solid var(--line); padding: 3px 10px; border-radius: 2px; font-size: 0.78rem; }
+@media (min-width: 640px) {
+  .template-executive { padding: 54px 58px; }
+  .template-executive .r-name { font-size: 2.4rem; }
+  .template-executive .r-title { font-size: 0.82rem; }
 }
 
 /* print adjustments (used during PDF export) */
