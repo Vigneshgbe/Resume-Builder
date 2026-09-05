@@ -157,67 +157,104 @@
 }
 
 /* ============================================
-   Template skins — all read from the same DOM
-   structure rendered by builder.js
+   Template skins — ALL single-column, top to
+   bottom, in DOM order. No grid/flex splitting
+   of resume content into side-by-side blocks —
+   ATS parsers read left-to-right, top-to-bottom,
+   and multi-column layouts scramble that order.
+   Visual identity comes only from type, color,
+   rules, and spacing.
    ============================================ */
 
-.resume-paper .r-name { font-family: var(--serif); font-weight: 600; }
+.resume-paper .r-name { font-weight: 600; }
 .resume-paper .r-title { color: var(--grey); }
 .resume-paper .r-section-title {
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  font-size: 0.78rem;
 }
 .resume-paper .r-empty { color: #B5AFA3; font-style: italic; }
 .resume-paper .r-entry { margin-bottom: 14px; }
+.resume-paper .r-entry:last-child { margin-bottom: 0; }
 .resume-paper .r-entry-head { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; }
 .resume-paper .r-entry-sub { color: var(--grey); font-size: 0.88rem; margin-bottom: 4px; }
+.resume-paper .r-entry-body { font-size: 0.92rem; margin-top: 2px; }
+.resume-paper .r-line-list { margin: 0; padding-left: 18px; }
+.resume-paper .r-line-list li { margin-bottom: 4px; font-size: 0.92rem; }
 .resume-paper .r-skill-tag {
   display: inline-block;
-  font-size: 0.82rem;
-  padding: 4px 10px;
-  border-radius: 20px;
-  margin: 0 6px 6px 0;
+  font-size: 0.85rem;
+  margin: 0 18px 4px 0;
 }
+.resume-paper .r-section { margin-bottom: 20px; }
+.resume-paper .r-section:last-child { margin-bottom: 0; }
 
-/* --- Classic: single column, top to bottom --- */
-.template-classic { padding: 48px 52px; }
-.template-classic .r-name { font-size: 2rem; margin-bottom: 2px; }
+/* ---------- Classic ----------
+   Plain, dependable, the format recruiters and
+   every ATS platform parse without any friction.
+   Times-like serif body, thin rules, no color
+   beyond ink and a single accent line. */
+.template-classic { padding: 50px 56px; font-family: 'Georgia', 'Times New Roman', serif; }
+.template-classic .r-name { font-family: 'Georgia', serif; font-size: 2rem; letter-spacing: 0.01em; margin-bottom: 2px; }
 .template-classic .r-title { font-size: 1.05rem; margin-bottom: 10px; }
-.template-classic .r-contact { font-size: 0.85rem; color: var(--grey); margin-bottom: 20px; }
-.template-classic .r-contact span:not(:last-child)::after { content: "  \00b7  "; }
-.template-classic .r-divider { border: none; border-top: 1px solid var(--line); margin: 0 0 20px; }
-.template-classic .r-section { margin-bottom: 22px; }
-.template-classic .r-section-title { color: var(--green); border-bottom: 2px solid var(--green); padding-bottom: 4px; margin-bottom: 12px; display: inline-block; }
-.template-classic .r-skill-tag { background: var(--paper-dim); color: var(--ink); }
+.template-classic .r-contact { font-size: 0.85rem; color: var(--grey); margin-bottom: 18px; font-family: var(--sans); }
+.template-classic .r-contact span:not(:last-child)::after { content: "  \2022  "; }
+.template-classic .r-divider { border: none; border-top: 2px solid var(--ink); margin: 0 0 20px; }
+.template-classic .r-section-title { font-family: var(--sans); color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 4px; margin-bottom: 10px; }
+.template-classic .r-skill-tag { color: var(--ink); }
+.template-classic .r-skill-tag::before { content: "\2022"; margin-right: 6px; color: var(--grey); }
+.template-classic .r-skill-tag:first-child::before { content: none; }
 
-/* --- Sidebar: dark left column --- */
-.template-sidebar { display: grid; grid-template-columns: 220px 1fr; padding: 0; }
-.template-sidebar .r-side { background: var(--ink); color: #E4DFD6; padding: 40px 24px; }
-.template-sidebar .r-side .r-name { color: #fff; font-size: 1.4rem; }
-.template-sidebar .r-side .r-title { color: #9BA3AC; font-size: 0.9rem; margin-bottom: 20px; }
-.template-sidebar .r-side .r-section { margin-bottom: 24px; }
-.template-sidebar .r-side .r-section-title { color: var(--green); border-bottom: 1px solid #3A4048; padding-bottom: 6px; margin-bottom: 10px; }
-.template-sidebar .r-side .r-contact-item { font-size: 0.82rem; margin-bottom: 6px; word-break: break-word; }
-.template-sidebar .r-side .r-skill-tag { display: block; background: none; padding: 3px 0; font-size: 0.82rem; }
-.template-sidebar .r-main { padding: 40px 36px; }
-.template-sidebar .r-main .r-section { margin-bottom: 22px; }
-.template-sidebar .r-main .r-section-title { color: var(--ink); border-bottom: 2px solid var(--paper-dim); padding-bottom: 4px; margin-bottom: 12px; }
-@media (max-width: 620px) {
-  .template-sidebar { grid-template-columns: 1fr; }
+/* ---------- Modern ----------
+   Confident sans-serif, a single accent color
+   used sparingly on section labels and a rule
+   under the name. Still one plain column. */
+.template-modern { padding: 52px 56px; }
+.template-modern .r-name { font-size: 2.1rem; margin-bottom: 2px; }
+.template-modern .r-title { font-size: 1.05rem; color: var(--green); font-weight: 600; margin-bottom: 10px; }
+.template-modern .r-contact { font-size: 0.85rem; color: var(--grey); margin-bottom: 18px; }
+.template-modern .r-contact span:not(:last-child)::after { content: "  \2022  "; }
+.template-modern .r-divider { border: none; border-top: 3px solid var(--green); margin: 0 0 22px; }
+.template-modern .r-section-title { color: var(--green); margin-bottom: 10px; }
+.template-modern .r-skill-tag {
+  background: var(--paper-dim);
+  padding: 4px 12px;
+  border-radius: 3px;
+  margin: 0 8px 8px 0;
+  font-size: 0.82rem;
 }
 
-/* --- Modern: bold header band, tag skills --- */
-.template-modern .r-header { background: var(--green); color: #fff; padding: 36px 44px; }
-.template-modern .r-header .r-name { color: #fff; font-size: 1.9rem; }
-.template-modern .r-header .r-title { color: #CFE0D8; }
-.template-modern .r-header .r-contact { font-size: 0.85rem; color: #CFE0D8; margin-top: 10px; }
-.template-modern .r-header .r-contact span:not(:last-child)::after { content: "  \00b7  "; }
-.template-modern .r-body { padding: 32px 44px 44px; }
-.template-modern .r-section { margin-bottom: 22px; }
-.template-modern .r-section-title { color: var(--rust); margin-bottom: 12px; }
-.template-modern .r-skill-tag { background: var(--paper-dim); color: var(--ink); border: 1px solid var(--line); }
+/* ---------- Compact ----------
+   Tighter line-height and smaller type for
+   people with a lot to say who need to hold
+   to one page. Still single column. */
+.template-compact { padding: 40px 48px; font-size: 0.92rem; line-height: 1.4; }
+.template-compact .r-name { font-size: 1.7rem; margin-bottom: 1px; }
+.template-compact .r-title { font-size: 0.95rem; margin-bottom: 8px; }
+.template-compact .r-contact { font-size: 0.8rem; color: var(--grey); margin-bottom: 14px; }
+.template-compact .r-contact span:not(:last-child)::after { content: "   |   "; color: var(--line); }
+.template-compact .r-divider { border: none; border-top: 1px solid var(--line); margin: 0 0 16px; }
+.template-compact .r-section { margin-bottom: 14px; }
+.template-compact .r-section-title { font-size: 0.72rem; color: var(--rust); margin-bottom: 6px; }
+.template-compact .r-entry { margin-bottom: 10px; }
+.template-compact .r-skill-tag { font-size: 0.8rem; margin: 0 14px 3px 0; }
+.template-compact .r-skill-tag::before { content: "\2022"; margin-right: 5px; color: var(--grey); }
+.template-compact .r-skill-tag:first-child::before { content: none; }
+
+/* ---------- Executive ----------
+   Adapted from the old build2 visual language:
+   large display name, wide letterspacing, a
+   heavier accent rule. Single column throughout. */
+.template-executive { padding: 54px 58px; }
+.template-executive .r-head { text-align: center; margin-bottom: 4px; }
+.template-executive .r-name { font-size: 2.4rem; letter-spacing: 0.02em; }
+.template-executive .r-title { font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.82rem; color: var(--grey); margin-bottom: 12px; }
+.template-executive .r-contact { font-size: 0.85rem; color: var(--grey); margin-bottom: 20px; }
+.template-executive .r-contact span:not(:last-child)::after { content: "  \2022  "; }
+.template-executive .r-divider { border: none; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); height: 3px; margin: 0 0 24px; }
+.template-executive .r-section-title { text-align: left; letter-spacing: 0.1em; color: var(--ink); margin-bottom: 10px; }
+.template-executive .r-skill-tag { border: 1px solid var(--line); padding: 3px 10px; border-radius: 2px; margin: 0 8px 8px 0; font-size: 0.8rem; }
 
 /* ---------- Toast ---------- */
 .builder-toast {

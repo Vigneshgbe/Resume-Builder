@@ -20,6 +20,8 @@
     summary: '',
     skills: '',
     languages: '',
+    achievements: '',
+    interests: '',
     experience: [],
     education: []
   };
@@ -65,7 +67,7 @@
   function initTemplateFromURL() {
     var params = new URLSearchParams(window.location.search);
     var t = params.get('template');
-    if (t && ['classic', 'sidebar', 'modern'].indexOf(t) !== -1) {
+    if (t && ['classic', 'modern', 'compact', 'executive'].indexOf(t) !== -1) {
       data.template = t;
     }
   }
@@ -81,7 +83,9 @@
     'f-link': 'link',
     'f-summary': 'summary',
     'f-skills': 'skills',
-    'f-languages': 'languages'
+    'f-languages': 'languages',
+    'f-achievements': 'achievements',
+    'f-interests': 'interests'
   };
 
   function populateSimpleFields() {
@@ -191,62 +195,49 @@
     }).join('');
   }
 
-  function renderClassic(root) {
+  // All templates share the exact same DOM order — single column,
+  // top to bottom — because that is the only layout every major ATS
+  // parses reliably. Visual identity comes from typography, color,
+  // and spacing only, never from splitting content into columns.
+  //
+  // Section order (matches what ATS parsers expect):
+  // Name/Title -> Contact -> Summary -> Skills -> Experience ->
+  // Education -> Languages -> Achievements -> Interests
+
+  function sectionBlock(title, innerHTML, skip) {
+    if (skip) return '';
+    return '<div class="r-section"><div class="r-section-title">' + title + '</div>' + innerHTML + '</div>';
+  }
+
+  function buildResumeHTML() {
     var contact = contactPieces().map(function (c) { return '<span>' + escapeHTML(c) + '</span>'; }).join('');
-    root.innerHTML =
-      '<div class="r-name">' + (escapeHTML(data.name) || 'Your Name') + '</div>' +
-      '<div class="r-title">' + escapeHTML(data.title || 'Your job title') + '</div>' +
-      '<div class="r-contact">' + (contact || '<span class="r-empty">Add your contact details</span>') + '</div>' +
+    return (
+      '<div class="r-head">' +
+        '<div class="r-name">' + (escapeHTML(data.name) || 'Your Name') + '</div>' +
+        '<div class="r-title">' + escapeHTML(data.title || 'Your job title') + '</div>' +
+        '<div class="r-contact">' + (contact || '<span class="r-empty">Add your contact details</span>') + '</div>' +
+      '</div>' +
       '<hr class="r-divider">' +
-      (data.summary ? '<div class="r-section"><div class="r-section-title">Summary</div><p>' + escapeHTML(data.summary) + '</p></div>' : '') +
-      '<div class="r-section"><div class="r-section-title">Experience</div>' + experienceHTML() + '</div>' +
-      '<div class="r-section"><div class="r-section-title">Education</div>' + educationHTML() + '</div>' +
-      '<div class="r-section"><div class="r-section-title">Skills</div>' + tagList(data.skills, 'r-skill-tag') + '</div>' +
-      (data.languages ? '<div class="r-section"><div class="r-section-title">Languages</div>' + tagList(data.languages, 'r-skill-tag') + '</div>' : '');
+      sectionBlock('Summary', '<p>' + escapeHTML(data.summary) + '</p>', !data.summary) +
+      sectionBlock('Skills', tagList(data.skills, 'r-skill-tag')) +
+      sectionBlock('Experience', experienceHTML()) +
+      sectionBlock('Education', educationHTML()) +
+      sectionBlock('Languages', tagList(data.languages, 'r-skill-tag'), !data.languages) +
+      sectionBlock('Achievements', lineList(data.achievements), !data.achievements) +
+      sectionBlock('Interests', tagList(data.interests, 'r-skill-tag'), !data.interests)
+    );
   }
 
-  function renderSidebar(root) {
-    root.innerHTML =
-      '<div class="r-side">' +
-        '<div class="r-name">' + (escapeHTML(data.name) || 'Your Name') + '</div>' +
-        '<div class="r-title">' + escapeHTML(data.title || 'Your job title') + '</div>' +
-        '<div class="r-section"><div class="r-section-title">Contact</div>' +
-          contactPieces().map(function (c) { return '<div class="r-contact-item">' + escapeHTML(c) + '</div>'; }).join('') +
-          (contactPieces().length ? '' : '<div class="r-contact-item r-empty">Add contact details</div>') +
-        '</div>' +
-        '<div class="r-section"><div class="r-section-title">Skills</div>' + tagList(data.skills, 'r-skill-tag') + '</div>' +
-        (data.languages ? '<div class="r-section"><div class="r-section-title">Languages</div>' + tagList(data.languages, 'r-skill-tag') + '</div>' : '') +
-      '</div>' +
-      '<div class="r-main">' +
-        (data.summary ? '<div class="r-section"><div class="r-section-title">Summary</div><p>' + escapeHTML(data.summary) + '</p></div>' : '') +
-        '<div class="r-section"><div class="r-section-title">Experience</div>' + experienceHTML() + '</div>' +
-        '<div class="r-section"><div class="r-section-title">Education</div>' + educationHTML() + '</div>' +
-      '</div>';
-  }
-
-  function renderModern(root) {
-    var contact = contactPieces().map(function (c) { return '<span>' + escapeHTML(c) + '</span>'; }).join('');
-    root.innerHTML =
-      '<div class="r-header">' +
-        '<div class="r-name">' + (escapeHTML(data.name) || 'Your Name') + '</div>' +
-        '<div class="r-title">' + escapeHTML(data.title || 'Your job title') + '</div>' +
-        '<div class="r-contact">' + (contact || '<span>Add your contact details</span>') + '</div>' +
-      '</div>' +
-      '<div class="r-body">' +
-        (data.summary ? '<div class="r-section"><div class="r-section-title">Summary</div><p>' + escapeHTML(data.summary) + '</p></div>' : '') +
-        '<div class="r-section"><div class="r-section-title">Experience</div>' + experienceHTML() + '</div>' +
-        '<div class="r-section"><div class="r-section-title">Education</div>' + educationHTML() + '</div>' +
-        '<div class="r-section"><div class="r-section-title">Skills</div>' + tagList(data.skills, 'r-skill-tag') + '</div>' +
-        (data.languages ? '<div class="r-section"><div class="r-section-title">Languages</div>' + tagList(data.languages, 'r-skill-tag') + '</div>' : '') +
-      '</div>';
+  function lineList(csv) {
+    var items = (csv || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!items.length) return '<p class="r-empty">Not added yet</p>';
+    return '<ul class="r-line-list">' + items.map(function (i) { return '<li>' + escapeHTML(i) + '</li>'; }).join('') + '</ul>';
   }
 
   function render() {
     var paper = document.getElementById('resumePaper');
     paper.className = 'resume-paper template-' + data.template;
-    if (data.template === 'sidebar') renderSidebar(paper);
-    else if (data.template === 'modern') renderModern(paper);
-    else renderClassic(paper);
+    paper.innerHTML = buildResumeHTML();
   }
 
   // ---------- PDF export ----------

@@ -17,8 +17,9 @@
       <label class="template-switch-label" for="templateSwitch">Template</label>
       <select id="templateSwitch" aria-label="Switch template">
         <option value="classic">Classic</option>
-        <option value="sidebar">Sidebar</option>
         <option value="modern">Modern</option>
+        <option value="compact">Compact</option>
+        <option value="executive">Executive</option>
       </select>
       <button id="downloadBtn" class="btn btn-primary btn-sm">Download PDF</button>
     </div>
@@ -102,6 +103,26 @@
             <div class="form-group">
               <label for="f-languages">Languages, separated by commas</label>
               <input type="text" id="f-languages" placeholder="English (fluent), Spanish (conversational)">
+            </div>
+          </div>
+        </details>
+
+        <details class="form-section">
+          <summary>Achievements <span class="optional-tag">optional</span></summary>
+          <div class="form-section-body">
+            <div class="form-group">
+              <label for="f-achievements">Achievements, separated by commas</label>
+              <input type="text" id="f-achievements" placeholder="Dean's list 2023, Hackathon winner">
+            </div>
+          </div>
+        </details>
+
+        <details class="form-section">
+          <summary>Interests <span class="optional-tag">optional</span></summary>
+          <div class="form-section-body">
+            <div class="form-group">
+              <label for="f-interests">Interests, separated by commas</label>
+              <input type="text" id="f-interests" placeholder="Photography, Chess, Volunteering">
             </div>
           </div>
         </details>
