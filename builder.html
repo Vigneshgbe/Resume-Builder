@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build your resume | Resume Builder</title>
+<link rel="icon" href="https://img.icons8.com/?size=100&id=a4l6bA9mSmBh&format=png&color=2D5F4C" type="image/x-icon">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/builder.css">
+</head>
+<body class="builder-body">
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">Resume<span>Builder</span></a>
+    <div class="builder-header-actions">
+      <label class="template-switch-label" for="templateSwitch">Template</label>
+      <select id="templateSwitch" aria-label="Switch template">
+        <option value="classic">Classic</option>
+        <option value="sidebar">Sidebar</option>
+        <option value="modern">Modern</option>
+      </select>
+      <button id="downloadBtn" class="btn btn-primary btn-sm">Download PDF</button>
+    </div>
+  </div>
+</header>
+
+<main class="builder-main">
+  <div class="builder-grid">
+
+    <!-- ===== FORM PANEL ===== -->
+    <section class="form-panel" aria-label="Resume details form">
+      <div class="form-panel-inner">
+
+        <div class="save-status" id="saveStatus">Saved to this browser</div>
+
+        <details open class="form-section">
+          <summary>Contact</summary>
+          <div class="form-section-body">
+            <div class="form-group">
+              <label for="f-name">Full name</label>
+              <input type="text" id="f-name" placeholder="Jordan Reyes">
+            </div>
+            <div class="form-group">
+              <label for="f-title">Job title / headline</label>
+              <input type="text" id="f-title" placeholder="Product Designer">
+            </div>
+            <div class="form-group">
+              <label for="f-email">Email</label>
+              <input type="email" id="f-email" placeholder="you@email.com">
+            </div>
+            <div class="form-group">
+              <label for="f-phone">Phone</label>
+              <input type="tel" id="f-phone" placeholder="+1 555 123 4567">
+            </div>
+            <div class="form-group">
+              <label for="f-location">Location</label>
+              <input type="text" id="f-location" placeholder="Austin, TX">
+            </div>
+            <div class="form-group">
+              <label for="f-link">Website or LinkedIn</label>
+              <input type="text" id="f-link" placeholder="linkedin.com/in/you">
+            </div>
+          </div>
+        </details>
+
+        <details open class="form-section">
+          <summary>Summary</summary>
+          <div class="form-section-body">
+            <div class="form-group">
+              <label for="f-summary">A few sentences about you</label>
+              <textarea id="f-summary" rows="4" placeholder="Brief, specific summary of your experience and what you're looking for next."></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details open class="form-section">
+          <summary>Experience</summary>
+          <div class="form-section-body" id="experienceList"></div>
+          <button type="button" class="btn btn-outline btn-sm add-btn" data-add="experience">+ Add experience</button>
+        </details>
+
+        <details open class="form-section">
+          <summary>Education</summary>
+          <div class="form-section-body" id="educationList"></div>
+          <button type="button" class="btn btn-outline btn-sm add-btn" data-add="education">+ Add education</button>
+        </details>
+
+        <details open class="form-section">
+          <summary>Skills</summary>
+          <div class="form-section-body">
+            <div class="form-group">
+              <label for="f-skills">Skills, separated by commas</label>
+              <input type="text" id="f-skills" placeholder="Figma, User research, Prototyping, SQL">
+            </div>
+          </div>
+        </details>
+
+        <details class="form-section">
+          <summary>Languages <span class="optional-tag">optional</span></summary>
+          <div class="form-section-body">
+            <div class="form-group">
+              <label for="f-languages">Languages, separated by commas</label>
+              <input type="text" id="f-languages" placeholder="English (fluent), Spanish (conversational)">
+            </div>
+          </div>
+        </details>
+
+        <div class="danger-zone">
+          <button type="button" id="clearBtn" class="btn btn-danger-outline btn-sm">Clear all fields</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== PREVIEW PANEL ===== -->
+    <section class="preview-panel" aria-label="Resume preview">
+      <div class="preview-scroll">
+        <div id="resumePaper" class="resume-paper template-classic">
+          <!-- rendered by builder.js -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div id="toast" class="builder-toast" role="status" aria-live="polite"></div>
+
+<!-- Experience row template -->
+<template id="experienceRowTpl">
+  <div class="repeat-row" data-row>
+    <div class="repeat-row-grid">
+      <div class="form-group">
+        <label>Role</label>
+        <input type="text" data-field="role" placeholder="Senior Designer">
+      </div>
+      <div class="form-group">
+        <label>Company</label>
+        <input type="text" data-field="company" placeholder="Acme Co.">
+      </div>
+      <div class="form-group">
+        <label>Dates</label>
+        <input type="text" data-field="dates" placeholder="2022 — Present">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>What you did</label>
+      <textarea data-field="description" rows="3" placeholder="One or two lines on your impact in this role."></textarea>
+    </div>
+    <button type="button" class="btn-remove-row" data-remove aria-label="Remove this entry">Remove</button>
+  </div>
+</template>
+
+<!-- Education row template -->
+<template id="educationRowTpl">
+  <div class="repeat-row" data-row>
+    <div class="repeat-row-grid">
+      <div class="form-group">
+        <label>Degree / Program</label>
+        <input type="text" data-field="degree" placeholder="B.A. Graphic Design">
+      </div>
+      <div class="form-group">
+        <label>School</label>
+        <input type="text" data-field="school" placeholder="State University">
+      </div>
+      <div class="form-group">
+        <label>Year</label>
+        <input type="text" data-field="year" placeholder="2021">
+      </div>
+    </div>
+    <button type="button" class="btn-remove-row" data-remove aria-label="Remove this entry">Remove</button>
+  </div>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="assets/builder.js"></script>
+</body>
+</html>

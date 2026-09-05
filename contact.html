@@ -1,115 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Resume/CV Builder</title>
-    <link rel="icon" href="https://img.icons8.com/?size=100&id=a4l6bA9mSmBh&format=png&color=40C057" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .footer {
-            background-color: #343a40; /* Match navbar color */
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-            position: static;
-            width: 100%;
-            margin-top: auto; /* Pushes footer to bottom if content is short */
-        }
-
-        .footer p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            width: 100%;
-            background-color: #007bff;
-            border-color: #007bff;
-            font-weight: bold;
-            font-size: 1.2rem;
-            padding: 10px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        .container {
-            max-width: 600px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Resume Builder</title>
+<link rel="icon" href="https://img.icons8.com/?size=100&id=a4l6bA9mSmBh&format=png&color=2D5F4C" type="image/x-icon">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Resume Builder</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html"><strong>HOME</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="free.html"><strong>FREE</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="coupon-code.html"><strong>PAID</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html"><strong>ABOUT US</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html"><strong>CONTACT US</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="pricing.html"><strong>PRICING</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="terms-and-conditions.html"><strong>TERMS</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="privacy-policy.html"><strong>PRIVACY</strong></a></li>
-                </ul>
-            </div>
-        </div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">Resume<span>Builder</span></a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
     </nav>
+  </div>
+</header>
 
-    <div class="container mt-5">
-        <h1>Contact Us</h1>
-        <form action="mailto:igreatapps@gmail.com" type="submit">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Send</button>
-        </form>
+<main>
+  <section class="block">
+    <div class="container-narrow">
+      <h1>Get in touch</h1>
+      <p class="muted">Found a bug, or have a suggestion? Send a note below.</p>
+
+      <form id="contactForm" style="margin-top:28px;">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>
+      <p id="contactNote" class="hint" style="margin-top:12px; display:none;"></p>
     </div>
+  </section>
+</main>
 
-   <!-- Footer -->
-   <footer class="footer">
-    <p>Developed by iGreatApps <span id="currentYear"></span>. All rights reserved.</p>
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <div class="brand" style="color:#F7F5F1; margin-bottom:8px; display:block;">Resume<span>Builder</span></div>
+      <p style="color:#8B8579; margin:0; max-width:32ch; font-size:0.9rem;">A fast, free way to put together a clean resume.</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="templates.html">Templates</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="terms-and-conditions.html">Terms</a></li>
+      <li><a href="privacy-policy.html">Privacy</a></li>
+    </ul>
+  </div>
+  <div class="container footer-bottom">
+    Developed by iGreatApps <span id="currentYear"></span>. All rights reserved.
+  </div>
 </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Footer Year Auto Update
-        const footerYear = document.getElementById('currentYear');
-        const currentYear = new Date().getFullYear();
-        footerYear.innerHTML = currentYear;
-    });
-    </script>
+<script src="assets/site.js"></script>
+<script>
+  // Opens the visitor's mail client with the message pre-filled.
+  // No backend, no accounts, no analytics — this is intentionally basic.
+  document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var message = document.getElementById('message').value;
+    var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
+    var mailto = 'mailto:igreatapps@gmail.com?subject=' + encodeURIComponent('Resume Builder contact form') + '&body=' + encodeURIComponent(body);
+    window.location.href = mailto;
+
+    var note = document.getElementById('contactNote');
+    note.style.display = 'block';
+    note.textContent = 'Opening your email app now. If nothing happens, email igreatapps@gmail.com directly.';
+  });
+</script>
 </body>
 </html>

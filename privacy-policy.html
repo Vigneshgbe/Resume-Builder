@@ -1,135 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | Resume/CV Builder</title>
-    <link rel="icon" href="https://img.icons8.com/?size=100&id=a4l6bA9mSmBh&format=png&color=40C057" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .container {
-            padding: 40px;
-        }
-
-        .footer {
-            background-color: #343a40; /* Match navbar color */
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .footer p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-
-        h1, h2, h3 {
-            color:#061b33;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy | Resume Builder</title>
+<link rel="icon" href="https://img.icons8.com/?size=100&id=a4l6bA9mSmBh&format=png&color=2D5F4C" type="image/x-icon">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Resume Builder</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html"><strong>HOME</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="free.html"><strong>FREE</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="coupon-code.html"><strong>PAID</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html"><strong>ABOUT US</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html"><strong>CONTACT US</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="pricing.html"><strong>PRICING</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="terms-and-conditions.html"><strong>TERMS</strong></a></li>
-                    <li class="nav-item"><a class="nav-link" href="privacy-policy.html"><strong>PRIVACY</strong></a></li>
-                </ul>
-            </div>
-        </div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">Resume<span>Builder</span></a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
+  </div>
+</header>
 
-    <div class="container">
-        <h1><strong>Privacy Policy</strong></h1>
-        <br>
-        <h2>1. Introduction</h2>
-        <p>Welcome to Resume builder. We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Privacy Policy outlines how we collect, use, and protect your personal information when you use our website and services.</p>
+<main>
+  <section class="block">
+    <div class="container-narrow">
+      <h1>Privacy Policy</h1>
+      <p class="muted">Last updated: <span id="currentYear"></span></p>
 
-        <h2>2. Information We Collect</h2>
-        <p>We may collect the following types of information:</p>
-        <ul>
-            <li><strong>Personal Information</strong>: Such as your name, email address, and payment details when you create an account or make a purchase.</li>
-            <li><strong>Usage Data</strong>: Information about your interactions with our website, such as IP address, browser type, and pages visited.</li>
-            <li><strong>Cookies</strong>: Small data files stored on your device that help us improve your browsing experience.</li>
-        </ul>
+      <h2>The short version</h2>
+      <p>Resume Builder doesn't require an account, doesn't run a server-side database, and doesn't collect the contents of your resume. Everything you type is stored only in your own browser.</p>
 
-        <h2>3. How We Use Your Information</h2>
-        <p>We use the information we collect for the following purposes:</p>
-        <ul>
-            <li>To provide and improve our services.</li>
-            <li>To process transactions and send you updates about your account.</li>
-            <li>To personalize your experience and respond to your inquiries.</li>
-            <li>To comply with legal obligations and enforce our terms.</li>
-        </ul>
+      <h2>What we store, and where</h2>
+      <p>Your resume details (name, work history, skills, and so on) are saved using your browser's local storage, on your own device. This data is never transmitted to us or to any third party. Clearing your browser's site data, or using a different browser or device, will remove it.</p>
 
-        <h2>4. Data Security</h2>
-        <p>We implement a variety of security measures to maintain the safety of your personal information. However, no method of transmission over the Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your personal information, we cannot guarantee its absolute security.</p>
+      <h2>What we don't do</h2>
+      <ul>
+        <li>We don't require you to register or log in.</li>
+        <li>We don't store your resume content on our servers.</li>
+        <li>We don't sell or share personal information, because we don't collect it in the first place.</li>
+      </ul>
 
-        <h2>5. Sharing Your Information</h2>
-        <p>We do not sell, trade, or otherwise transfer your personal information to outside parties except as described in this Privacy Policy. We may share your information with:</p>
-        <ul>
-            <li><strong>Service Providers</strong>: Third-party vendors who assist us in operating our website and conducting our business.</li>
-            <li><strong>Legal Requirements</strong>: When required to comply with legal obligations or protect our rights and property.</li>
-        </ul>
+      <h2>Basic site analytics</h2>
+      <p>Like most websites, our hosting provider may log standard technical information (such as IP address and browser type) for security and performance purposes. This is separate from anything you type into the resume builder.</p>
 
-        <h2>6. Your Rights</h2>
-        <p>You have the right to:</p>
-        <ul>
-            <li>Access and update your personal information.</li>
-            <li>Request the deletion of your personal information, subject to legal requirements.</li>
-            <li>Opt-out of receiving promotional communications from us.</li>
-        </ul>
+      <h2>Changes to this policy</h2>
+      <p>If this policy changes, the update will be posted on this page with a new date.</p>
 
-        <h2>7. Changes to This Privacy Policy</h2>
-        <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated effective date. Your continued use of the website after any changes indicates your acceptance of the new Privacy Policy.</p>
-
-        <h2>8. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-        <ul>
-            <li><strong>Email</strong>: igreatapps@gmail.com</li>
-            <li><strong>WhatsApp</strong>: +91 9994755334</li>
-        </ul>
+      <h2>Contact</h2>
+      <p>Questions about this policy can be sent to <a href="mailto:igreatapps@gmail.com">igreatapps@gmail.com</a>.</p>
     </div>
+  </section>
+</main>
 
-    <footer class="footer">
-        <p>Developed by iGreatApps <span id="currentYear"></span>. All rights reserved.</p>
-    </footer>
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <div class="brand" style="color:#F7F5F1; margin-bottom:8px; display:block;">Resume<span>Builder</span></div>
+      <p style="color:#8B8579; margin:0; max-width:32ch; font-size:0.9rem;">A fast, free way to put together a clean resume.</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="templates.html">Templates</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="terms-and-conditions.html">Terms</a></li>
+      <li><a href="privacy-policy.html">Privacy</a></li>
+    </ul>
+  </div>
+  <div class="container footer-bottom">
+    Developed by iGreatApps <span id="currentYear"></span>. All rights reserved.
+  </div>
+</footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Footer Year Auto Update
-            const footerYear = document.getElementById('currentYear');
-            const currentYear = new Date().getFullYear();
-            footerYear.innerHTML = currentYear;
-        });
-        </script>
+<script src="assets/site.js"></script>
 </body>
 </html>
