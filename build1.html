@@ -701,6 +701,24 @@ function printCV() {
   window.print();
 }
   </script>
+      <script>
+        // Check if the user is logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+          // No user is signed in, redirect to login page
+          window.location.href = 'u-login.html'; // replace with your login page URL
+        }
+        });
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Successful login
+        window.location.href = 'build1.html'; // Redirect to build1.html after login
+      })
+      .catch((error) => {
+        // Handle login errors
+        console.error(error.message);
+      });
+    </script>
 </body>
 
 </html>

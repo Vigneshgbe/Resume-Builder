@@ -302,4 +302,22 @@ transform: translate(-60%,-4.8%);
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script>
     <script src="build2-script.js"></script>
+    <script>
+        // Check if the user is logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+          // No user is signed in, redirect to login page
+          window.location.href = 'u-login.html'; // replace with your login page URL
+        }
+        });
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Successful login
+        window.location.href = 'build1.html'; // Redirect to build1.html after login
+      })
+      .catch((error) => {
+        // Handle login errors
+        console.error(error.message);
+      });
+    </script>
 </html>

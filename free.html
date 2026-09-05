@@ -8,8 +8,8 @@
     <title>Free | Resume/CV Builder</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-<style>
-     body {
+    <style>
+        body {
             font-family: 'Arial', sans-serif;
             color: #333;
             margin: 0;
@@ -45,14 +45,14 @@
             margin-bottom: 20px;
         }
 
-        .banner-section .discount-code {
+        .discount-code {
             font-size: 1.5rem;
             font-weight: 700;
             color: #dc3545;
             margin-bottom: 20px;
         }
 
-        .banner-section .btn {
+        .btn {
             background-color: #28a745;
             border-color: #28a745;
             color: #fff;
@@ -62,26 +62,28 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
 
-        .banner-section .btn:hover {
+        .btn:hover {
             background-color: #218838;
             border-color: #1e7e34;
         }
+
         .footer {
-        background-color: #343a40; /* Match navbar color */
-        color: #fff;
-        text-align: center;
-        padding: 20px;
-        margin: 0;
-        position: static;
-        width: 100%;
-        margin-top: auto; /* Pushes footer to bottom if content is short */
-    }
-    
-    .footer p {
-        margin: 0;
-        font-size: 0.9rem;
-    }
-</style>
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            position: static;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -105,18 +107,62 @@
     </nav>
 
     <!-- Banner Section -->
-    <section class="banner-section">
-        <h1>Exclusive Offer!</h1>
-        <p>For a limited time, use the code below to get a one-time free resume generation with our Basic Plan. Don't miss out on this opportunity to create a standout resume at no cost!</p>
-        <div class="discount-code">Use Code: <strong>DKBD0309</strong></div>
-        <a href="pricing.html" class="btn btn-primary">Get Started</a>
+    <section class="banner-section" id="coupon-section">
+        <h1>Unlock Your Dream Job with a Free Resume!</h1>
+        <p>Use the coupon code below to access our Basic Plan for more discounts and create a standout resume that sets you apart!</p>
+        <div class="discount-code" id="discount-code">Use Code: <strong>Loading...</strong></div>
+        <a href="u-login.html" class="btn btn-primary">Get Started</a>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Developed by VIGNESH G <span id="currentYear"></span>. All rights reserved.</p>
+        <p>Developed by iGreatApps <span id="currentYear"></span>. All rights reserved.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyByIQWS4VhN_GMhGPy-o8Mp3HHZLXKAU_k",
+            authDomain: "web-development-project-site.firebaseapp.com",
+            projectId: "web-development-project-site",
+            storageBucket: "web-development-project-site.appspot.com",
+            messagingSenderId: "465762016992",
+            appId: "1:465762016992:web:a5418990778571632d7a85",
+            measurementId: "G-6G4FJTQZCZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch coupon codes from Firestore
+        const fetchCouponCode = async () => {
+            const couponQuery = query(collection(db, 'resume-coupons'), where('plan', '==', 'Basic'));
+            try {
+                const querySnapshot = await getDocs(couponQuery);
+                if (!querySnapshot.empty) {
+                    // Get the first coupon document
+                    const couponData = querySnapshot.docs[0].data();
+                    document.getElementById('discount-code').innerHTML = `Use Code: <strong>${couponData.couponcode}</strong>`;
+                } else {
+                    document.getElementById('discount-code').innerHTML = 'Sorry, No coupon codes available.';
+                }
+            } catch (error) {
+                console.error("Error fetching coupon codes: ", error);
+                document.getElementById('discount-code').innerHTML = 'Error loading coupon codes.';
+            }
+        };
+
+        // Call the function to fetch and display coupon codes
+        fetchCouponCode();
+
+        // Display current year in the footer
+        document.getElementById('currentYear').innerText = new Date().getFullYear();
+    </script>
 </body>
+</html>

@@ -39,7 +39,7 @@
         }
 
         h1, h2, h3 {
-            color: #007bff;
+            color: #061b33;
         }
     </style>
 </head>
@@ -115,16 +115,24 @@
         <h2>13. Contact Information</h2>
         <p>If you have any questions about these Terms, please contact us at:</p>
         <ul>
-            <li><strong>Email</strong>: vickystft@gmail.com</li>
-            <li><strong>WhatsApp</strong>: +91 9047606037</li>
+            <li><strong>Email</strong>: igreatapps@gmail.com</li>
+            <li><strong>WhatsApp</strong>: +91 9994755334</li>
         </ul>
     </div>
 
     <footer class="footer">
-        <p>Developed by VIGNESH G <span id="currentYear"></span>. All rights reserved.</p>
+        <p>Developed by iGreatApps <span id="currentYear"></span>. All rights reserved.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Footer Year Auto Update
+            const footerYear = document.getElementById('currentYear');
+            const currentYear = new Date().getFullYear();
+            footerYear.innerHTML = currentYear;
+        });
+        </script>
 </body>
 </html>

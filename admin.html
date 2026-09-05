@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Font Awesome and Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHq6hVOFTBYmKc3H57P5V0UHO0SvHpsgH6Y7H6yq2Fla3I4E+zFFXqmF1lVb4YJbkqJg0KQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            margin: 20px 0;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            background-color: #28a745; /* Success green color */
+            color: #fff;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            min-width: 250px;
+        }
+        .toast.error {
+            background-color: #dc3545; /* Error red color */
+        }
+        .dashboard-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .table-section {
+            margin: 40px 0;
+        }
+        .table-section h3 {
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Admin Dashboard</h1>
+
+     <!-- Statistics Cards -->
+     <div class="row">
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title">Total User Logins</h5>
+                    <p id="totalUsers" class="card-text">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Coupons Active</h5>
+                    <p id="totalCouponsUsed" class="card-text">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Purchases</h5>
+                    <p id="totalPurchases" class="card-text">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Create Coupon Form -->
+        <div class="my-4">
+            <h3>Create Coupon Code</h3>
+            <form id="couponForm">
+                <div class="form-group">
+                    <label for="couponCode">Coupon Code</label>
+                    <input type="text" class="form-control" id="couponCode" required>
+                </div>
+                <div class="form-group">
+                    <label for="discountValue">Discount Value (₹)</label>
+                    <input type="number" class="form-control" id="discountValue" required min="1" max="500">
+                </div>
+                <div class="form-group">
+                    <label for="plan">Plan</label>
+                    <select class="form-control" id="plan" required>
+                        <option value="">Select Plan</option>
+                        <option value="Basic">Basic</option>
+                        <option value="Pro">Pro</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Coupon</button>
+            </form>
+        </div>
+
+        <!-- User Registration Details -->
+        <div class="table-section">
+            <h3>User Registration Details</h3>
+            <div class="table-responsive">
+                <table class="table table-striped" id="usersTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Registration Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- User data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Active Coupons -->
+        <div class="table-section">
+            <h3>Active Coupons</h3>
+            <div class="table-responsive">
+                <table class="table table-striped" id="activeCouponsTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Coupon Code</th>
+                            <th>Plan</th>
+                            <th>Discount</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Active coupons data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Coupons Used Details -->
+        <div class="table-section">
+            <h3>Coupons Used</h3>
+            <div class="table-responsive">
+                <table class="table table-striped" id="couponsUsedTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Coupon Code</th>
+                            <th>Plan</th>
+                            <th>Discount</th>
+                            <th>Applied Date</th>
+                            <th>Applied Time</th>
+                            <th>Status</th>
+                            <th>User Email</th>
+                            <th>Username</th>
+                            <th>Coupon Used Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Coupons used data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <!-- jQuery, Firebase, and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-Df3kXSm+Dsf9srrYQuPfNuqlX61R0o+B36J8E/DNpr4E5gpeIs+I1x/V+qxHZnq8" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+        // Firebase Initialization
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyByIQWS4VhN_GMhGPy-o8Mp3HHZLXKAU_k",
+            authDomain: "web-development-project-site.firebaseapp.com",
+            databaseURL: "https://web-development-project-site-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "web-development-project-site",
+            storageBucket: "web-development-project-site.appspot.com",
+            messagingSenderId: "465762016992",
+            appId: "1:465762016992:web:a5418990778571632d7a85",
+            measurementId: "G-6G4FJTQZCZ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+       // Create Coupon
+       document.getElementById('couponForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const couponCode = document.getElementById('couponCode').value.trim();
+            const discountValue = document.getElementById('discountValue').value;
+            const plan = document.getElementById('plan').value;
+
+            if (couponCode === "" || discountValue === "" || plan === "") {
+                showToast("Please fill in all fields.", "error");
+                return;
+            }
+
+            try {
+                const couponRef = doc(db, 'resume-coupons', couponCode);
+                const couponSnapshot = await getDoc(couponRef);
+                if (couponSnapshot.exists()) {
+                    showToast("Coupon code already exists.", "error");
+                    return;
+                }
+
+                // Get current date in DD-MM-YYYY format
+                const currentDate = new Date();
+                const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${currentDate.getFullYear()}`;
+
+                await setDoc(couponRef, {
+                    couponcode: couponCode,
+                    discount: parseInt(discountValue),
+                    plan: plan,
+                    createdAt: formattedDate // Store date in DD-MM-YYYY format
+                });
+                showToast("Coupon created successfully!");
+                document.getElementById('couponForm').reset();
+                loadStats();
+            } catch (error) {
+                showToast(`Error: ${error.message}`, "error");
+            }
+        });
+
+                // Load Statistics and Coupons
+                async function loadStats() {
+            try {
+                // Fetch total users
+                const usersSnapshot = await getDocs(collection(db, 'resume-users'));
+                document.getElementById('totalUsers').textContent = usersSnapshot.size;
+
+                // Fetch total coupons used
+                const couponsSnapshot = await getDocs(collection(db, 'resume-coupons'));
+                document.getElementById('totalCouponsUsed').textContent = couponsSnapshot.size;
+
+                // Populate total purchases
+                const couponsUsedSnapshot = await getDocs(collection(db, 'resume-couponused'));
+                document.getElementById('totalPurchases').textContent = couponsUsedSnapshot.size;
+
+            } catch (error) {
+                showToast(`Error loading statistics: ${error.message}`, "error");
+            }
+        }
+
+        // Load User Registration Details
+        async function loadUsers() {
+            const usersRef = collection(db, 'resume-users');
+            const userSnapshot = await getDocs(usersRef);
+            const usersTable = document.getElementById('usersTable').querySelector('tbody');
+            usersTable.innerHTML = '';
+
+            userSnapshot.forEach(doc => {
+                const user = doc.data();
+                const row = `
+                    <tr>
+                        <td>${doc.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.registrationDate || 'N/A'}</td>
+                    </tr>
+                `;
+                usersTable.innerHTML += row;
+            });
+        }
+
+         // Load Coupons Used Details
+        async function loadCouponsUsed() {
+        const couponsUsedRef = collection(db, 'resume-couponused');
+        const couponsUsedSnapshot = await getDocs(couponsUsedRef);
+        const couponsUsedTable = document.getElementById('couponsUsedTable').querySelector('tbody');
+        couponsUsedTable.innerHTML = '';  // Clear any existing rows
+
+        couponsUsedSnapshot.forEach(doc => {
+            const coupon = doc.data();
+            const appliedDate = new Date(coupon.appliedDate.seconds * 1000);  // Convert Firebase timestamp to JS Date
+            const dateString = coupon.appliedDate;
+            const timeString = coupon.appliedTime;
+            
+            const row = `
+                <tr>
+                    <td>${coupon.couponCode}</td>
+                    <td>${coupon.plan}</td>
+                    <td>${coupon.discount}</td>
+                    <td>${dateString}</td>
+                    <td>${timeString}</td>
+                    <td>${coupon.status}</td>
+                    <td>${coupon.userEmail}</td>
+                    <td>${coupon.username}</td>
+                    <td>${coupon.usedCount}</td>
+                </tr>
+            `;
+            couponsUsedTable.innerHTML += row;
+        });
+    }
+
+           // Load Active Coupons
+           async function loadActiveCoupons() {
+            const activeCouponsTable = document.getElementById('activeCouponsTable').getElementsByTagName('tbody')[0];
+            activeCouponsTable.innerHTML = '';
+            const querySnapshot = await getDocs(collection(db, 'resume-coupons'));
+            querySnapshot.forEach((doc) => {
+                const couponData = doc.data();
+                const row = activeCouponsTable.insertRow();
+                row.innerHTML = `
+                    <td>${couponData.couponcode}</td>
+                    <td>${couponData.plan}</td>
+                    <td>₹${couponData.discount}</td>
+                    <td>${couponData.createdAt}</td>
+                    <td><button class="btn btn-danger btn-sm remove-btn" data-id="${doc.id}">Remove</button></td>
+                `;
+            });
+    
+            // Attach event listeners to the Remove buttons
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const couponId = this.getAttribute('data-id');
+                    removeCoupon(couponId);
+                });
+            });
+        }
+    
+        // Remove Coupon
+        async function removeCoupon(couponId) {
+            try {
+                await deleteDoc(doc(db, 'resume-coupons', couponId));
+                showToast("Coupon removed successfully!");
+                loadActiveCoupons();
+            } catch (error) {
+                showToast(`Error: ${error.message}`, "error");
+            }
+        }
+    
+        // Attach removeCoupon function to window object for global access
+        window.removeCoupon = removeCoupon;
+    
+        // Show Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.innerText = message;
+            toast.classList.add(type === 'error' ? 'error' : 'success');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.opacity = 1;
+                setTimeout(() => {
+                    toast.style.opacity = 0;
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                        toast.classList.remove('error', 'success');
+                    }, 500);
+                }, 3000);
+            }, 100);
+        }
+
+        // Load all data on page load
+        window.onload = function() {
+            loadActiveCoupons();
+            loadUsers();
+            loadCouponsUsed();
+            loadStats();
+        }
+    </script>
+</body>
+</html>

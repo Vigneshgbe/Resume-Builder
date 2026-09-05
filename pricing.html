@@ -7,7 +7,6 @@
     <link rel="icon" href="https://img.icons8.com/?size=100&id=a4l6bA9mSmBh&format=png&color=40C057" type="image/x-icon">
     <title>Pricing | Resume/CV Builder</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -124,16 +123,17 @@
             <p>Choose the plan that best suits your resume-building needs. Each plan is designed to offer the best value and quality.</p>
         </div>
         <div class="coupon-section">
-            <input type="text" id="couponCode" class="coupon-input" placeholder="Enter Coupon Code">
-            <button id="applyCoupon" class="apply-btn">Apply Coupon</button>
-            <p id="discountMessage"></p>
+                <input type="text" id="couponCode" class="coupon-input" placeholder="Enter Coupon Code">
+                <button id="validateButton" class="apply-btn">Apply Coupon</button>
+                <div id="validationText" class="validation-text"></div>
         </div>
-        <div class="row">
+        
+        <div class="row" id="prices">
             <div class="col-md-4">
                 <div class="card pricing-card">
                     <div class="card-body">
                         <h5 class="card-title">Basic Plan</h5>
-                        <div class="card-price" id="basicPrice">₹ 199</div>
+                        <div class="card-price"><span id="basicPrice">₹249</span></div>
                         <p class="card-text">Single Resume Download</p>
                         <ul class="list-unstyled">
                             <li>ATS Friendly</li>
@@ -150,7 +150,7 @@
                 <div class="card pricing-card">
                     <div class="card-body">
                         <h5 class="card-title">Pro Plan</h5>
-                        <div class="card-price" id="proPrice">₹ 349</div>
+                        <div class="card-price"><span id="proPrice">₹399</span></div>
                         <p class="card-text">Unlimited Access and Support</p>
                         <ul class="list-unstyled">
                             <li>ATS Friendly</li>
@@ -167,7 +167,7 @@
                 <div class="card pricing-card">
                     <div class="card-body">
                         <h5 class="card-title">Premium Plan</h5>
-                        <div class="card-price" id="premiumPrice">₹ 499</div>
+                        <div class="card-price"><span id="premiumPrice">₹549</span></div>
                         <p class="card-text">Customer Service 24x7</p>
                         <ul class="list-unstyled">
                             <li>ATS Friendly</li>
@@ -184,70 +184,176 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
-        <p>Developed by VIGNESH G <span id="currentYear"></span>. All rights reserved.</p>
+        <p>Developed by iGreatApps <span id="currentYear"></span>. All rights reserved.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('applyCoupon').addEventListener('click', function() {
-            const couponCode = document.getElementById('couponCode').value.trim();
-            const basicPriceElement = document.getElementById('basicPrice');
-            const proPriceElement = document.getElementById('proPrice');
-            const premiumPriceElement = document.getElementById('premiumPrice');
-            const discountMessage = document.getElementById('discountMessage');
-            
-            const validCoupon = 'DKBD0309';
-            const discount = 199; // Discount amount
-    
-            if (couponCode === validCoupon) {
-                basicPriceElement.textContent = '₹ ' + (199 - discount);
-                proPriceElement.textContent = '₹ ' + (349 - discount);
-                premiumPriceElement.textContent = '₹ ' + (499 - discount);
-                discountMessage.textContent = 'Coupon Applied! Prices have been updated.';
-                discountMessage.style.color = 'green';
-            } else {
-                discountMessage.textContent = 'Invalid Coupon Code';
-                discountMessage.style.color = 'red';
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where, addDoc, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyByIQWS4VhN_GMhGPy-o8Mp3HHZLXKAU_k",
+            authDomain: "web-development-project-site.firebaseapp.com",
+            databaseURL: "https://web-development-project-site-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "web-development-project-site",
+            storageBucket: "web-development-project-site.appspot.com",
+            messagingSenderId: "465762016992",
+            appId: "1:465762016992:web:a5418990778571632d7a85",
+            measurementId: "G-6G4FJTQZCZ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth();
+
+        const originalBasicPrice = 249;
+        const originalProPrice = 399;
+        const originalPremiumPrice = 549;
+
+        async function validateCoupon() {
+            const couponCode = document.getElementById("couponCode").value.trim();
+            const validationText = document.getElementById("validationText");
+
+            if (couponCode === "") {
+                validationText.textContent = "Please enter a coupon code.";
+                validationText.style.color = "red";
+                return;
             }
-        });
-    
-        function getPrice(plan) {
-            const basicPrice = 199;
-            const proPrice = 349;
-            const premiumPrice = 499;
-            const discount = 199; // Discount amount
-            
-            switch(plan) {
-                case 'basic':
-                    return document.getElementById('couponCode').value.trim() === 'DKBD0309' ? basicPrice - discount : basicPrice;
-                case 'pro':
-                    return document.getElementById('couponCode').value.trim() === 'DKBD0309' ? proPrice - discount : proPrice;
-                case 'premium':
-                    return document.getElementById('couponCode').value.trim() === 'DKBD0309' ? premiumPrice - discount : premiumPrice;
-                default:
-                    return 0;
+
+            try {
+                const couponRef = collection(db, "resume-coupons");
+                const q = query(couponRef, where("couponcode", "==", couponCode));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    validationText.textContent = "Invalid coupon code.";
+                    validationText.style.color = "red";
+                } else {
+                    const couponData = snapshot.docs[0].data();
+                    const discount = couponData.discount;
+                    const plan = couponData.plan;
+
+                    applyDiscount(discount, plan);
+                    validationText.textContent = "Coupon code is valid! Discount: ₹" + discount;
+                    validationText.style.color = "green";
+
+                    // Store coupon usage details
+                    const user = auth.currentUser;
+                    if (user) {
+                        await storeCouponUsage(couponCode, discount, plan, user);
+                    } else {
+                        console.log("No user is logged in.");
+                    }
+                }
+            } catch (error) {
+                console.error("Error validating coupon: ", error);
+                validationText.textContent = "Error validating coupon code: " + error.message;
+                validationText.style.color = "red";
             }
         }
-    
+
+        function applyDiscount(discount, plan) {
+            if (plan === "Basic") {
+                const discountedBasicPrice = originalBasicPrice - discount;
+                document.getElementById("basicPrice").innerText = "₹" + (discountedBasicPrice > 0 ? discountedBasicPrice : 0);
+            } else if (plan === "Pro") {
+                const discountedProPrice = originalProPrice - discount;
+                document.getElementById("proPrice").innerText = "₹" + (discountedProPrice > 0 ? discountedProPrice : 0);
+            }
+            // Premium price remains the same
+        }
+
+        document.getElementById("validateButton").addEventListener("click", validateCoupon);
+
+        async function storeCouponUsage(couponCode, discount, plan, user) {
+            try {
+                const user = auth.currentUser;
+
+                if (!user) {
+                    console.log("No user is logged in.");
+                    return;
+                }
+
+                // Get current date and time
+                const appliedDate = new Date();
+                const appliedDateString = appliedDate.toLocaleDateString();
+                const appliedTime = appliedDate.toLocaleTimeString();
+
+                // Step 1: Retrieve the username from the 'resume-users' collection
+                const usersRef = collection(db, "resume-users");
+                const userQuery = query(usersRef, where("email", "==", user.email));
+                const querySnapshot = await getDocs(userQuery);
+
+                let username = "Anonymous"; // Default if not found
+                if (!querySnapshot.empty) {
+                    querySnapshot.forEach((doc) => {
+                        username = doc.data().username || "Anonymous";
+                    });
+                }
+
+                // Step 2: Store coupon usage in 'resume-couponused'
+                const couponUsageRef = collection(db, "resume-couponused");
+                await addDoc(couponUsageRef, {
+                    couponCode: couponCode,
+                    discount: discount,
+                    plan: plan,
+                    appliedDate: appliedDateString,
+                    appliedTime: appliedTime,
+                    status: "valid",
+                    userEmail: user.email,
+                    username: username,
+                    usedCount: 1
+                });
+
+                // Step 3: Update the usage count in 'resume-coupons'
+                const couponRef = querySnapshot.docs[0].ref;
+                await updateDoc(couponRef, {
+                    usedCount: increment(1)
+                });
+
+                console.log("Coupon usage stored and updated successfully!");
+            } catch (error) {
+                console.error("Error storing coupon usage: ", error);
+            }
+        }
+
         function handleBuyNow(plan) {
-            const price = getPrice(plan);
+            let price = 0;
+
+            if (plan === 'basic') {
+                price = parseFloat(document.getElementById("basicPrice").textContent.replace('₹', ''));
+            } else if (plan === 'pro') {
+                price = parseFloat(document.getElementById("proPrice").textContent.replace('₹', ''));
+            } else if (plan === 'premium') {
+                price = originalPremiumPrice;
+            }
+
             if (price === 0) {
-                window.location.href = 'build1.html'; // Redirect to build1.html if price is zero
+                window.location.href = 'build1.html'; // Redirect to build page for free
             } else {
-                window.location.href = 'payment.html'; // Redirect to payment.html otherwise
+                window.location.href = 'payment.html'; // Redirect to payment for non-zero price
             }
         }
-    
+
         document.querySelectorAll('.btn-primary').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const plan = this.parentElement.querySelector('.card-title').textContent.toLowerCase().replace(' plan', '');
                 handleBuyNow(plan);
             });
         });
     </script>
-    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Footer Year Auto Update
+            const footerYear = document.getElementById('currentYear');
+            const currentYear = new Date().getFullYear();
+            footerYear.innerHTML = currentYear;
+        });
+        </script>
 </body>
 </html>
