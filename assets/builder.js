@@ -145,7 +145,6 @@
     if (!el) return;
     tinymce.init({
       selector: '#' + selectorId,
-      license_key: 'gpl',
       menubar: false,
       statusbar: false,
       toolbar: toolbar,
@@ -170,7 +169,6 @@
     var id = textarea.id;
     tinymce.init({
       selector: '#' + id,
-      license_key: 'gpl',
       menubar: false,
       statusbar: false,
       toolbar: RTE_TOOLBAR_SHORT,
