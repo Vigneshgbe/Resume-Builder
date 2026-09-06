@@ -328,7 +328,7 @@ section.block.tight { padding: 40px 0; }
   transform: translateY(-3px);
 }
 .template-preview {
-  aspect-ratio: 3/4;
+  aspect-ratio: 5/4;
   background: var(--paper-dim);
   border-bottom: 1px solid var(--line);
   overflow: hidden;
