@@ -36,8 +36,8 @@ Resume-Generator/
 ├── free.html
 ├── paid.html
 ├── login.html
-├── build11.html
-├── build22.html
+├── build1.html
+├── build2.html
 ├── pricing.html
 └── README.md
 ```
@@ -95,8 +95,8 @@ Have feedback or suggestions? Feel free to [open an issue](https://github.com/Vi
 
 ## 📜 License
 
-This project is licensed under the **MIT License** – feel free to use and modify it.
+This project is licensed.
 
 ---
 
-**Developed with ❤️ by [Vignesh G](https://github.com/Vigneshgbe)**
+**Developed by [Vignesh G](https://github.com/Vigneshgbe)**
