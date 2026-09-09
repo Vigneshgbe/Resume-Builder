@@ -21,7 +21,7 @@ A fully responsive **Resume Generator Web App** built using **HTML, CSS3, JavaSc
 | -------------- | ------------------------------------------------------------------- |
 | **Frontend**   | HTML5, CSS3, JavaScript (Vanilla JS)                                |
 | **Backend**    | Java Script                                                         |
-| **Database**   | Firebase / Local Storage *(as applicable)*                          |
+| **Database**   | Local Storage *(as applicable)*                          |
 | **Deployment** | GitHub Pages / Vercel                                               |
 
 ---
@@ -33,12 +33,14 @@ Resume-Generator/
 │
 ├── index.html
 ├── assets
-├── free.html
-├── paid.html
-├── login.html
+├── about.html
+├── 404.html
+├── templates.html
 ├── build1.html
 ├── build2.html
-├── pricing.html
+├── contact.html
+├── terms.html
+├── policy.html
 └── README.md
 ```
 
